@@ -24,7 +24,6 @@ const TickerItems = () => (
 			<span style={{ color: 'rgb(64, 64, 255)' }}>10PM EST:&nbsp;</span> playing
 			CS:GO / Trackmania
 		</div>
-
 		<div className='ticker__item text'>
 			<Emoji emoji='📢' /> &nbsp;
 			<span style={{ color: 'red' }}>Announcement:&nbsp;</span> Found my missing
