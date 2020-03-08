@@ -1,38 +1,90 @@
-.App {
-  text-align: center;
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* https://codepen.io/lewismcarey/pen/GJZVoG */
+@keyframes ticker {
+	0% {
+		transform: translate3d(0, 0, 0);
+		visibility: visible;
+	}
+	100% {
+		transform: translate3d(-100%, 0, 0);
+	}
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.ticker-wrap {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	overflow: hidden;
+	padding-top: 0px;
+	padding-left: 100%;
+	box-sizing: content-box;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ticker {
+	display: inline-block;
+	white-space: nowrap;
+	padding-right: 100%;
+	box-sizing: content-box;
+	animation-name: ticker;
+	animation-iteration-count: infinite;
+	animation-duration: 400s;
+	animation-timing-function: linear;
 }
 
-.App-link {
-  color: #61dafb;
+.ticker__item {
+	display: inline-block;
+	padding: 0 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#top-text {
+	display: flex;
+	padding: 0px 6px;
+	overflow: hidden;
+	justify-content: flex-end;
 }
+
+.right.text span {
+	padding: 0 10px;
+}
+.right.text span:last-child {
+	padding-right: 0px;
+}
+
+#camera-box {
+	position: fixed;
+	width: 423px;
+	height: 317px;
+	right: 30px;
+	bottom: 30px;
+}
+
+#screen-box {
+	position: fixed;
+	width: 423px;
+	height: 240px;
+	right: 30px;
+	top: 30px;
+}
+
+.text {
+	color: hsl(0, 0%, 100%);
+	font-size: 22px;
+	text-shadow: 2px 2px black;
+}
+
+.drop-shadow {
+	/* 	background-color: #ff0000bb;
+ */
+	box-shadow: 0px 5px 50px 0px #000000aa;
+}
+
+/*
+	start from left, remove "that padding" (left?)
+	write js to remove padding after first animation completes
+*/
