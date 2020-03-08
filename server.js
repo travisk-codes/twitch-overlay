@@ -1,8 +1,8 @@
 const express = require('express')
 const path = require('path')
-const TwitchWebhook = require('twitch-webhook')
+//const TwitchWebhook = require('twitch-webhook')
 
-const twitchParams = require('./twitch-webhook-params')
+//const twitchParams = require('./twitch-webhook-params')
 
 const app = express()
 app.use(express.static(path.join(__dirname, 'build')))
@@ -11,7 +11,7 @@ app.get('/*', function(req, res) {
 })
 app.listen(7781)
 
-const twitchWebhook = new TwitchWebhook(twitchParams)
+/* const twitchWebhook = new TwitchWebhook(twitchParams)
 
 // set listener for all topics
 twitchWebhook.on('*', ({ topic, options, endpoint, event }) => {
@@ -56,3 +56,4 @@ process.on('SIGINT', () => {
 
 	process.exit(0)
 })
+ */
