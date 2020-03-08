@@ -11,33 +11,33 @@ const Emoji = ({ emoji }) => (
 const TickerItems = () => (
 	<>
 		<div className='ticker__item text'>
-			<Emoji emoji='🕒' />{' '}
+			{' '}
 			<span style={{ color: 'lightskyblue' }}>Doing now: &nbsp;</span>
 			automatically update follower count using twitch api
 		</div>
 		<div className='ticker__item text'>
-			<Emoji emoji='🕒' />{' '}
+			{' '}
 			<span style={{ color: 'dodgerblue' }}>Doing later:&nbsp;</span> sleep
 		</div>
 		<div className='ticker__item text'>
-			<Emoji emoji='🕒' />{' '}
+			{' '}
 			<span style={{ color: 'rgb(64, 64, 255)' }}>10PM EST:&nbsp;</span> playing
 			CS:GO / Trackmania
 		</div>
 
 		<div className='ticker__item text'>
-			<Emoji emoji='📢' /> &nbsp;
+			&nbsp;
 			<span style={{ color: 'red' }}>Announcement:&nbsp;</span> Found my missing
 			lip balm (favorite)
 		</div>
 		<div className='ticker__item text' style={{ color: 'rgb(150, 255, 150)' }}>
-			<Emoji emoji='🛣️' /> &nbsp;Road to Affiliate:
+			&nbsp;Road to Affiliate:
 		</div>
 		<div className='ticker__item text' style={{ color: 'rgb(150, 150, 255)' }}>
-			<Emoji emoji='🙋🏼‍♀️' /> 27/50 followers (over half way there!)
+			27/50 followers (over half way there!)
 		</div>
 		<div className='ticker__item text' style={{ color: 'rgb(255, 150, 150)' }}>
-			<Emoji emoji='👀' /> &nbsp;0.8/3 average viewers
+			&nbsp;0.8/3 average viewers
 		</div>
 	</>
 )
