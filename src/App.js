@@ -5,6 +5,27 @@ import './App.css'
 const TimeTextArray = () => {
 	const [textArray, setTextArray] = React.useState([])
 	let interval
+
+	function useInterval(callback, delay) {
+		const savedCallback = React.useRef()
+
+		// Remember the latest callback.
+		React.useEffect(() => {
+			savedCallback.current = callback
+		}, [callback])
+
+		// Set up the interval.
+		React.useEffect(() => {
+			function tick() {
+				savedCallback.current()
+			}
+			if (delay !== null) {
+				let id = setInterval(tick, delay)
+				return () => clearInterval(id)
+			}
+		}, [delay])
+	}
+
 	function getTimeTextArray() {
 		const date = new Date()
 		// US NC RA 20 03 09 13 00
@@ -37,13 +58,9 @@ const TimeTextArray = () => {
 		]
 	}
 
-	function tick() {
+	useInterval(() => {
 		setTextArray(getTimeTextArray())
-	}
-
-	React.useEffect(() => {
-		interval = setInterval(() => tick(), 1000)
-	})
+	}, 1000)
 
 	return (
 		<TickerItem
@@ -119,8 +136,11 @@ const TickerItem = ({ textArray, color, isFullyColored }) => (
 
 const TickerItems = () => (
 	<>
+		<TimeTextArray />
 		{tickerItems.map(props => (
-			<TickerItem {...props} />
+			<>
+				<TickerItem {...props} />
+			</>
 		))}
 	</>
 )
@@ -130,7 +150,6 @@ function App() {
 		<div className='App'>
 			<div className='ticker-wrap'>
 				<div className='ticker'>
-					<TimeTextArray />
 					<TickerItems />
 					<TickerItems />
 					<TickerItems />
