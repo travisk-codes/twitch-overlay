@@ -21,7 +21,7 @@
 	top: 0;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 0px;
+	padding-top: 10px;
 	padding-left: 100%;
 	box-sizing: content-box;
 }
@@ -33,13 +33,13 @@
 	box-sizing: content-box;
 	animation-name: ticker;
 	animation-iteration-count: infinite;
-	animation-duration: 400s;
+	animation-duration: 600s;
 	animation-timing-function: linear;
 }
 
 .ticker__item {
 	display: inline-block;
-	padding: 0 20px;
+	padding: 0 30px;
 }
 
 #top-text {
@@ -59,9 +59,9 @@
 #camera-box {
 	position: fixed;
 	width: 423px;
-	height: 317px;
+	height: 315px;
 	right: 30px;
-	bottom: 30px;
+	bottom: 50px;
 }
 
 #screen-box {
@@ -69,7 +69,18 @@
 	width: 423px;
 	height: 240px;
 	right: 30px;
-	top: 30px;
+	top: 50px;
+}
+
+.bottom-text {
+	position: fixed;
+	bottom: 13px;
+	white-space: nowrap;
+	padding-left: 270px;
+}
+
+.bottom-text .ticker__item {
+	padding: 0 6px;
 }
 
 .text {

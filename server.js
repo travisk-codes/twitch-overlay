@@ -1,59 +1,116 @@
 const express = require('express')
+const http = require('http')
+const io = require('socket.io')
 const path = require('path')
-//const TwitchWebhook = require('twitch-webhook')
 
-//const twitchParams = require('./twitch-webhook-params')
+const TwitchClient = require('twitch').default
+const HelixFollow = require('twitch').HelixFollow
+const HelixStream = require('twitch').HelixStream
+const WebHookListener = require('twitch-webhooks').default
+
+const { userId, clientId, secret } = require('./config')
 
 const app = express()
+const server = http.createServer(app)
+const socket = io(server)
+
 app.use(express.static(path.join(__dirname, 'build')))
-app.get('/*', function(req, res) {
+app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
-app.listen(7781)
 
-/* const twitchWebhook = new TwitchWebhook(twitchParams)
+const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
 
-// set listener for all topics
-twitchWebhook.on('*', ({ topic, options, endpoint, event }) => {
-	// topic name, for example "streams"
-	console.log(topic)
-	// topic options, for example "{user_id: 12826}"
-	console.log(options)
-	// full topic URL, for example
-	// "https://api.twitch.tv/helix/streams?user_id=12826"
-	console.log(endpoint)
-	// topic data, timestamps are automatically converted to Date
-	console.log(event)
-})
+const webhookConfig = {
+	hostName: '084b95ed.ngrok.io',
+	port: 8090,
+	reverseProxy: { port: 443, ssl: true },
+}
 
-// set listener for topic
-twitchWebhook.on('users/follows', ({ event }) => {
-	console.log(event)
-})
+async function getWebhookSubscriptions() {
+	const listener = await WebHookListener.create(twitchClient, webhookConfig)
+	/* 	listener.listen()
+	const streamChangeSubscription = await listener.subscribeToStreamChanges(
+		userId,
+		onStreamChange,
+	)
+ */ const followsSubscription = await listener.subscribeToFollowsToUser(
+		userId,
+		onNewFollow,
+	)
+	return await [, /* streamChangeSubscription */ followsSubscription]
+}
 
-// subscribe to topic
-twitchWebhook.subscribe('users/follows', {
-	first: 1,
-	from_id: 12826, // ID of Twitch Channel ¯\_(ツ)_/¯
-})
+async function onStreamChange(stream = HelixStream) {
+	try {
+		if (stream) {
+			console.log('yay stream')
+			//console.log(stream.title)
+			socket.emit('streamTitleChange', stream.title)
+		} else {
+			console.log('no stream?')
+			const streamTitle = await twitchClient.helix.streams.getStreamByUserId(
+				userId,
+			).title
+			socket.emit('streamTitleChange', streamTitle)
+		}
+	} catch (e) {
+		console.log(e)
+	}
+}
 
-// renew the subscription when it expires
-twitchWebhook.on('unsubscribe', obj => {
-	twitchWebhook.subscribe(obj['hub.topic'])
-})
+const onNewFollow = async (follows = HelixFollow) => {
+	if (follows) {
+		console.log('yay follows')
+		console.log(follows)
+	} else {
+		console.log('no follows :(')
+	}
+}
 
-// tell Twitch that we no longer listen
-// otherwise it will try to send events to a down app
-process.on('SIGINT', () => {
-	// unsubscribe from all topics
-	twitchWebhook.unsubscribe('*')
-
-	// or unsubscribe from each one individually
-	twitchWebhook.unsubscribe('users/follows', {
-		first: 1,
-		to_id: 12826,
+const getAllFollows = () => {
+	const follows = twitchClient.helix.users.getFollowsPaginated({
+		followedUser: userId,
 	})
+	return follows.getAll()
+}
 
-	process.exit(0)
+const subscriptions = getWebhookSubscriptions()
+
+socket.on('connection', async socket => {
+	console.log('websocket connection established with client')
+	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
+	const follows = await getAllFollows()
+	socket.emit('streamTitleChange', stream.title)
+	socket.emit('follows', follows)
+
+	socket.on('disconnect', async () => {
+		try {
+			/* 			const streamChangeSubscription = await subscriptions[0]
+			streamChangeSubscription.stop()
+			const followsSubscription = await subscriptions[1]
+			followsSubscription.stop()
+ */ console.log(
+				'disconnected',
+			)
+		} catch (e) {
+			console.log(e)
+		}
+	})
 })
- */
+
+server.listen(7781, () => console.log('listening on 7781'))
+
+process.on('SIGINT', async () => {
+	try {
+		/* 		const streamChangeSubscription = await subscriptions
+		streamChangeSubscription.stop()
+				const followsSubscription = await subscriptions[1]
+		followsSubscription.stop()
+ */ process.exit(
+			0,
+		)
+	} catch (e) {
+		console.log(e)
+	}
+})
