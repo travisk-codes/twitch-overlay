@@ -11,3 +11,11 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 👩🏼‍💻 Twitch stream overlay 🌐 Node.js, React.js, Twitch API, feat. Party Parrot 🎉 🦜
 💼 Job Applications (Sorry) 🏢 feat. Pirate Party Parrot 🗡️ 🎉 🦜
 ⌨️ Web Dev 👩🏼‍💻 Twitch stream overlay 🌐 Node.js, React.js, Twitch API, feat. Party Parrot 🎉 🦜
+💼 Job Applications (Sorry) 🏢 feat. Bored Party Parrot 😶 🎉 🦜 (and Blobcat)
+👩🏼‍💻 Web Dev 🔖 Bookmarks App ⚛️ React.js, Node.js, MySQL, feat. Party Parrot 🎉 🦜
+✍️ Creative Writing ✌️ Whack-job Manifesto, feat. Party Parrot 🎉 🦜 (and Blobcat)
+👩🏼‍💻 Web Dev 🔖 Bookmarks App ⚛️ Tests and TypeScript and Typos Oh My!, feat. Party Parrot 🎉 🦜 (and Blobcat)
+👩🏼‍💻 Web Dev 🏠 https://travisk.info ⚛️ React.js 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
+👩🏼‍💻 Web Dev 🔖 Bookmarks App ⚛️ React.js, TypeScript, Testing 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
+💼 Job Applications, Stressful Calls, Chores (Sorry) 🏢 feat. Pirate Party Parrot 🗡️ 🎉 🦜 & Blobcat 🐈
+⌨️ Web Dev 👩🏼‍💻 Twitch Stream Overlay ⚛️ React.js, Spotify API 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈

@@ -37,9 +37,34 @@
 	animation-timing-function: linear;
 }
 
+.ticker-wrap-music {
+	position: fixed;
+	bottom: 12px;
+	right: 0;
+	overflow: hidden;
+	box-sizing: content-box;
+	width: 465px;
+	mask-image: linear-gradient(to left, rgb(0, 0, 0) 80%, rgba(0, 0, 0, 0));
+}
+
+.ticker-music {
+	display: inline-block;
+	white-space: nowrap;
+	padding-right: 465px;
+	box-sizing: content-box;
+	animation-name: ticker;
+	animation-iteration-count: infinite;
+	animation-duration: 150s;
+	animation-timing-function: linear;
+}
+
 .ticker__item {
 	display: inline-block;
 	padding: 0 30px;
+}
+
+.ticker-music div {
+	padding: 0 5px;
 }
 
 #top-text {
@@ -67,8 +92,32 @@
 #screen-box {
 	position: fixed;
 	width: 423px;
-	height: 240px;
+	height: 237px;
 	right: 30px;
+	top: 50px;
+}
+
+#terminal {
+	position: fixed;
+	width: 423px;
+	height: 722px;
+	right: 30px;
+	top: 316px;
+}
+
+#vscode {
+	position: fixed;
+	width: 848px;
+	bottom: 50px;
+	right: 485px;
+	top: 50px;
+}
+
+#browser {
+	position: fixed;
+	width: 1165px;
+	bottom: 50px;
+	left: 30px;
 	top: 50px;
 }
 
@@ -76,7 +125,10 @@
 	position: fixed;
 	bottom: 13px;
 	white-space: nowrap;
-	padding-left: 270px;
+	left: 300px;
+	overflow: hidden;
+	right: 485px;
+	mask-image: linear-gradient(to right, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
 }
 
 .bottom-text .ticker__item {

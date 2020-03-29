@@ -1,7 +1,11 @@
 import React from 'react'
 import socketIOClient from 'socket.io-client'
 
+import MusicTicker from './MusicTicker'
+
 import './App.css'
+
+const socket = socketIOClient('http://localhost:7781')
 
 const TimeTextArray = () => {
 	const [textArray, setTextArray] = React.useState([])
@@ -78,7 +82,7 @@ const Emoji = ({ emoji }) => (
 	</span>
 )
 
-const TickerItem = ({ textArray, color, isFullyColored }) => (
+export const TickerItem = ({ textArray, color, isFullyColored }) => (
 	<div
 		className='ticker__item text'
 		style={{ color: isFullyColored ? color : null }}>
@@ -98,18 +102,19 @@ const TickerItem = ({ textArray, color, isFullyColored }) => (
 	</div>
 )
 
-const socket = socketIOClient('http://localhost:7781')
-
 function App() {
 	const [followers, setFollowers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
+
 	React.useEffect(() => {
-		console.log('effect!')
+		console.log('called App useEffect')
+
 		socket.on('follows', data => {
 			setFollowers(data.map(datum => datum._data.from_name))
 		})
 		socket.on('streamTitleChange', data => setStreamTitle(data))
 	}, [followers, streamTitle])
+
 	const tickerItems = [
 		{
 			textArray: ['', '', streamTitle],
@@ -117,12 +122,12 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Doing Now:', 'displaying latest follows on overlay'],
+			textArray: ['🕒', 'Doing Now:', 'Getting my overlay online'],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Then Later:', 'sleep I guess.'],
+			textArray: ['🕒', 'Then Later:', 'getting overlay online?'],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
@@ -132,7 +137,7 @@ function App() {
 			isFullyColored: false,
 		},
 	 */ {
-			textArray: ['📢', 'Announcement:', `you are good and valid.`],
+			textArray: ['📢', 'Announcement:', `this-is-fine.gif`],
 			color: 'red',
 			isFullyColored: false,
 		},
@@ -142,15 +147,12 @@ function App() {
 			isFullyColored: true,
 		},
 		{
-			textArray: [
-				'🙋🏼‍♀️',
-				followers.length + '/50 followers (over half way there!)',
-			],
+			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers (!!!)'],
 			color: 'rgb(150, 150, 255)',
 			isFullyColored: true,
 		},
 		{
-			textArray: ['👀', '1.33/3 average viewers'],
+			textArray: ['👀', '1.7/3 average viewers (over half-way there!)'],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
 		},
@@ -174,10 +176,8 @@ function App() {
 	const TickerItems = () => (
 		<>
 			<TimeTextArray />
-			{tickerItems.map(props => (
-				<>
-					<TickerItem {...props} />
-				</>
+			{tickerItems.map((props, i) => (
+				<TickerItem key={i} {...props} />
 			))}
 		</>
 	)
@@ -199,12 +199,17 @@ function App() {
 				</div>
 			</div>
 			<div className='drop-shadow' id='screen-box' />
-			<div className='drop-shadow' id='camera-box' />
+			<div className='drop-shadow' id='camera-box' />{' '}
+			{/* 			<div className='drop-shadow' id='terminal' />
+			<div className='drop-shadow' id='vscode' />
+			<div className='drop-shadow' id='browser' />
+ */}{' '}
 			<div className='bottom-text'>
-				{bottomTextItems.map(props => (
-					<TickerItem {...props} />
+				{bottomTextItems.map((props, i) => (
+					<TickerItem key={i} {...props} />
 				))}
 			</div>
+			<MusicTicker />
 		</div>
 	)
 }
