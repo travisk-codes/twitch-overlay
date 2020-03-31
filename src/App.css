@@ -12,7 +12,7 @@
 		visibility: visible;
 	}
 	100% {
-		transform: translate3d(-100%, 0, 0);
+		transform: translate3d(-50%, 0, 0);
 	}
 }
 
@@ -22,39 +22,44 @@
 	width: 100%;
 	overflow: hidden;
 	padding-top: 10px;
-	padding-left: 100%;
+	padding-left: 0%;
 	box-sizing: content-box;
 }
 
 .ticker {
 	display: inline-block;
 	white-space: nowrap;
-	padding-right: 100%;
+	padding-right: 0%;
 	box-sizing: content-box;
 	animation-name: ticker;
 	animation-iteration-count: infinite;
-	animation-duration: 600s;
+	animation-duration: 60s;
 	animation-timing-function: linear;
 }
 
 .ticker-wrap-music {
 	position: fixed;
 	bottom: 12px;
-	right: 0;
+	right: 480px;
 	overflow: hidden;
 	box-sizing: content-box;
-	width: 465px;
-	mask-image: linear-gradient(to left, rgb(0, 0, 0) 80%, rgba(0, 0, 0, 0));
+	width: 855px;
+	mask-image: linear-gradient(
+		to left,
+		rgba(0, 0, 0, 0),
+		rgb(0, 0, 0) 10%,
+		rgb(0, 0, 0) 90%,
+		rgba(0, 0, 0, 0)
+	);
 }
 
 .ticker-music {
 	display: inline-block;
 	white-space: nowrap;
-	padding-right: 465px;
 	box-sizing: content-box;
 	animation-name: ticker;
 	animation-iteration-count: infinite;
-	animation-duration: 150s;
+	animation-duration: 20s;
 	animation-timing-function: linear;
 }
 
@@ -84,7 +89,7 @@
 #camera-box {
 	position: fixed;
 	width: 423px;
-	height: 315px;
+	height: 312px;
 	right: 30px;
 	bottom: 50px;
 }
@@ -127,8 +132,8 @@
 	white-space: nowrap;
 	left: 300px;
 	overflow: hidden;
-	right: 485px;
-	mask-image: linear-gradient(to right, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
+	right: 1370px;
+	mask-image: linear-gradient(to right, rgb(0, 0, 0) 90%, rgba(0, 0, 0, 0));
 }
 
 .bottom-text .ticker__item {

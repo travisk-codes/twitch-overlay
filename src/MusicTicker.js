@@ -22,46 +22,16 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQAuPHQYdxiHQnmgLrGbQp1wwlQagKjD08xsshlsSNKusmi5GqKPhjtOiWSYIcU4R95KppkiPldyHvTkdOET9srJfJfpB93_HvuKuhhUvJqwJzrNnkFWHsxXvM1m6srGbAOq3GrnHRuwf__exgWR9EoN9cMv',
+		'BQDytc996Vu-6L1pkH_CFYxeLzOjLKy-Dw2NS5oCr2YS8kwGkU9SpbZiVVKx-8WTS2jAldrsEEXsHhTA2r_ZXyZ3GNLBW6lOHoFcDByKX0UgQ-AsgEtzE3KUrR3yM8gliiAoqp_yWJByvJkzdXeJHY9-gwXr',
 	)
 
 	useEffect(() => {
-		const fetchAccessAuthorizationFromUser = async () => {
-			let requestQueryParams = {
-				client_id: '6b9e8e8b997d45298e0023dc6225522a',
-				response_type: 'code',
-				redirect_uri: 'http://localhost:3000',
-				scope: 'user-read-playback-state',
-			}
-			let accountAuthRoute = new URL('https://accounts.spotify.com/authorize')
-			Object.keys(requestQueryParams).forEach(key => {
-				accountAuthRoute.searchParams.append(key, requestQueryParams[key])
-			})
-			try {
-				const response = await fetch(accountAuthRoute)
-				return await response
-			} catch (e) {
-				console.warn(e.name, e.message)
-				return 'no access auth from user'
-			}
-		}
+		const fetchAccessAuthorizationFromUser = async () => {}
 		const fetchAccessAndRefreshTokens = async code => {
-			const requestOptions = {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					Authorization:
-						'Basic NmI5ZThlOGI5OTdkNDUyOThlMDAyM2RjNjIyNTUyMmE6M2UxYThkY2FlZWUyNGMzMThhNzk3NDc4NTNjZjBhNDc=',
-				},
-				body: `grant_type=authorization_code&code=${code}&redirect_uri=http://localhost:3000`,
-			}
 			try {
-				const response = await fetch(
-					'https://accounts.spotify.com/api/token',
-					requestOptions,
-				)
+				const response = await fetch('https://travisk.info/current-music')
 				const json = await response.json()
-				return json.access_token
+				console.log(json)
 			} catch (e) {
 				console.log('could not fetch access token')
 				console.error(e.name + ': ' + e.message)
@@ -145,7 +115,7 @@ const MusicTicker = () => {
 		}
 	}
 
-	//useInterval(fetchCurrentMusic, 5000)
+	useInterval(fetchCurrentMusic, 5000)
 
 	const { song, artist, album } = currentMusic
 
@@ -159,14 +129,6 @@ const MusicTicker = () => {
 	return (
 		<div className='ticker-wrap-music'>
 			<div className='ticker-music'>
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
-
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
 				<TickerItem textArray={textArray} />
 				<TickerItem textArray={textArray} />
 			</div>

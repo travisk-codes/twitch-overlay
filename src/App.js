@@ -82,23 +82,15 @@ const Emoji = ({ emoji }) => (
 	</span>
 )
 
-export const TickerItem = ({ textArray, color, isFullyColored }) => (
+export const TickerItem = ({ textArray, color, isFullyColored, className }) => (
 	<div
-		className='ticker__item text'
+		className={`ticker__item text ${className}`}
 		style={{ color: isFullyColored ? color : null }}>
 		<Emoji emoji={textArray[0]} />
 		&nbsp;
 		<span style={{ color }}>{textArray[1]}</span>
 		&nbsp;
-		{textArray[2]}
-		{textArray[3]}
-		{textArray[4]}
-		{textArray[5]}
-		{textArray[6]}
-		{textArray[7]}
-		{textArray[8]}
-		{textArray[9]}
-		{textArray[10]}
+		{textArray.map((_, i) => (i > 1 ? textArray[i] : null))}
 	</div>
 )
 
@@ -122,12 +114,16 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Doing Now:', 'Getting my overlay online'],
+			textArray: ['🕒', 'Doing Now:', 'working on ticker text behavior'],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Then Later:', 'getting overlay online?'],
+			textArray: [
+				'🕒',
+				'Then Later:',
+				'getting overlay online with Spotify working',
+			],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
@@ -147,7 +143,7 @@ function App() {
 			isFullyColored: true,
 		},
 		{
-			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers (!!!)'],
+			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers 💜 Thank You! 💜'],
 			color: 'rgb(150, 150, 255)',
 			isFullyColored: true,
 		},
@@ -160,13 +156,13 @@ function App() {
 
 	const bottomTextFollowers = followers.map((follower, i) => ({
 		textArray: ['♥ ', ' ' + follower],
-		color: `hsl(${i * 25}, 100%, 75%)`,
+		color: `hsl(${i * 40}, 100%, 75%)`,
 		isFullyColored: false,
 	}))
 
 	const bottomTextItems = [
 		{
-			textArray: ['💕', 'Thank you so much for following!'],
+			textArray: ['♥ ', 'Newest Followers'],
 			color: 'white',
 			isFullyColored: false,
 		},
@@ -188,22 +184,13 @@ function App() {
 				<div className='ticker'>
 					<TickerItems />
 					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
-					<TickerItems />
 				</div>
 			</div>
 			<div className='drop-shadow' id='screen-box' />
 			<div className='drop-shadow' id='camera-box' />{' '}
-			{/* 			<div className='drop-shadow' id='terminal' />
+			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
- */}{' '}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
