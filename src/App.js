@@ -5,6 +5,14 @@ import MusicTicker from './MusicTicker'
 
 import './App.css'
 
+const textEntries = {
+	'doing now': "findin' me a job dag-nabit",
+	'then later': 'more TypeScript tests for React components probably',
+	announcement: 'this_is_fine.gif',
+	'avg followers': '1.9',
+	'current status': ' coffee has me going yet!',
+}
+
 const socket = socketIOClient('http://localhost:7781')
 
 const TimeTextArray = () => {
@@ -90,7 +98,7 @@ export const TickerItem = ({ textArray, color, isFullyColored, className }) => (
 		&nbsp;
 		<span style={{ color }}>{textArray[1]}</span>
 		&nbsp;
-		{textArray.map((_, i) => (i > 1 ? textArray[i] : null))}
+		{textArray.map((_, i) => (i > 1 ? <>{textArray[i]}&nbsp;</> : null))}
 	</div>
 )
 
@@ -114,16 +122,12 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Doing Now:', 'working on ticker text behavior'],
+			textArray: ['🕒', 'Doing Now:', textEntries['doing now']],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
 		{
-			textArray: [
-				'🕒',
-				'Then Later:',
-				'getting overlay online with Spotify working',
-			],
+			textArray: ['🕒', 'Then Later:', textEntries['then later']],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
@@ -133,7 +137,7 @@ function App() {
 			isFullyColored: false,
 		},
 	 */ {
-			textArray: ['📢', 'Announcement:', `this-is-fine.gif`],
+			textArray: ['📢', 'Announcement:', textEntries['announcement']],
 			color: 'red',
 			isFullyColored: false,
 		},
@@ -148,7 +152,10 @@ function App() {
 			isFullyColored: true,
 		},
 		{
-			textArray: ['👀', '1.7/3 average viewers (over half-way there!)'],
+			textArray: [
+				'👀',
+				`${textEntries['avg followers']}/3 average viewers (over half-way there!)`,
+			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
 		},
@@ -186,17 +193,35 @@ function App() {
 					<TickerItems />
 				</div>
 			</div>
-			<div className='drop-shadow' id='screen-box' />
-			<div className='drop-shadow' id='camera-box' />{' '}
+			<div className='drop-shadow' id='camera-box' />
+			{/* 			<div className='drop-shadow' id='screen-box' />
 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
+ */}{' '}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
 				))}
 			</div>
 			<MusicTicker />
+			<div className='ticker-wrap-current-status'>
+				<div className='ticker-current-status'>
+					{[0, 1].map(() => (
+						<TickerItem
+							textArray={[
+								'👩🏼 ',
+								' Current Status ',
+								' 🤔 ',
+								textEntries['current status'],
+							]}
+							color='#ff5090'
+							isFullyColored={false}
+							className='current-status'
+						/>
+					))}
+				</div>
+			</div>
 		</div>
 	)
 }

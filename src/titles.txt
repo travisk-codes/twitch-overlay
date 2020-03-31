@@ -18,4 +18,5 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 👩🏼‍💻 Web Dev 🏠 https://travisk.info ⚛️ React.js 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
 👩🏼‍💻 Web Dev 🔖 Bookmarks App ⚛️ React.js, TypeScript, Testing 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
 💼 Job Applications, Stressful Calls, Chores (Sorry) 🏢 feat. Pirate Party Parrot 🗡️ 🎉 🦜 & Blobcat 🐈
-⌨️ Web Dev 👩🏼‍💻 Twitch Stream Overlay ⚛️ React.js, Spotify API 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
+👩🏼‍💻 Web Dev 🖼️ Twitch Stream Overlay ⚛️ React.js, Node.js, Spotify API 📢 feat. Party Parrot 🎉 🦜 & Blobcat 🐈
+💼 Job Applications (Sorry) 📢 feat. Work Parrot 🦜 & Blobcat 🐈
