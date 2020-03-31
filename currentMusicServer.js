@@ -1,5 +1,6 @@
 const express = require('express')
 const http = require('http')
+const request = require('request')
 
 const app = express()
 const server = http.createServer(app)
@@ -19,13 +20,12 @@ app.get('/*', async (req, res) => {
 		accountAuthRoute.searchParams.append(key, requestQueryParams[key])
 	})
 
-	try {
-		const response = await fetch(accountAuthRoute)
-		res.json(await response)
-	} catch (e) {
-		console.warn(e.name, e.message)
-		res.json(e)
-	}
-})
+	request(accountAuthRoute, (err, response, body) => {
+		if (!error && response.statusCode == 200) {
+			console.log(body)
+		} else {
+			console.error(err.name, err.message)
+		}
+	})
 
 server.listen(7782, () => console.log('listening on 7781'))
