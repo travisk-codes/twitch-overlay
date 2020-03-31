@@ -20,12 +20,15 @@ app.get('/*', async (req, res) => {
 		accountAuthRoute.searchParams.append(key, requestQueryParams[key])
 	})
 
-	request(accountAuthRoute, (err, response, body) => {
-		if (!error && response.statusCode == 200) {
-			console.log(body)
-		} else {
-			console.error(err.name, err.message)
-		}
-	})
+	request(
+		{ url: 'https://accounts.spotify.com/authorize', qs: requestQueryParams },
+		(err, response, body) => {
+			if (!err && response.statusCode == 200) {
+				console.log(body)
+			} else {
+				console.error(err.name, err.message)
+			}
+		},
+	)
 })
 server.listen(7782, () => console.log('listening on 7781'))
