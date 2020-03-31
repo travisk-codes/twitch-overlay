@@ -32,12 +32,10 @@ const MusicTicker = () => {
 				const response = await fetch(
 					'https://travisk.info/current-music/login',
 					{
-						headers: {
-							'Access-Control-Allow-Origin': '*',
-						},
+						mode: 'no-cors',
 					},
 				)
-				const json = response.body
+				const json = response
 				console.log(json)
 				return json
 			} catch (e) {
@@ -123,7 +121,7 @@ const MusicTicker = () => {
 		}
 	}
 
-	useInterval(fetchCurrentMusic, 5000)
+	//useInterval(fetchCurrentMusic, 5000)
 
 	const { song, artist, album } = currentMusic
 

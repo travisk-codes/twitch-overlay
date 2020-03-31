@@ -98,7 +98,9 @@ export const TickerItem = ({ textArray, color, isFullyColored, className }) => (
 		&nbsp;
 		<span style={{ color }}>{textArray[1]}</span>
 		&nbsp;
-		{textArray.map((_, i) => (i > 1 ? <>{textArray[i]}&nbsp;</> : null))}
+		{textArray.map((_, i) =>
+			i > 1 ? <span key={i}>{textArray[i]}&nbsp;</span> : null,
+		)}
 	</div>
 )
 
@@ -180,7 +182,9 @@ function App() {
 		<>
 			<TimeTextArray />
 			{tickerItems.map((props, i) => (
-				<TickerItem key={i} {...props} />
+				<span key={i}>
+					<TickerItem {...props} />
+				</span>
 			))}
 		</>
 	)
@@ -207,8 +211,9 @@ function App() {
 			<MusicTicker />
 			<div className='ticker-wrap-current-status'>
 				<div className='ticker-current-status'>
-					{[0, 1].map(() => (
+					{[0, 1].map(i => (
 						<TickerItem
+							key={i}
 							textArray={[
 								'👩🏼 ',
 								' Current Status ',
