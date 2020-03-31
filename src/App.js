@@ -6,8 +6,8 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': "findin' me a job dag-nabit",
-	'then later': 'more TypeScript tests for React components probably',
+	'doing now': 'trying to get spotify auth flow working',
+	'then later': 'maybe short article on ticker text solution?',
 	announcement: 'this_is_fine.gif',
 	'avg followers': '1.9',
 	'current status': ' coffee has me going yet!',
