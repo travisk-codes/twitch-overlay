@@ -27,5 +27,5 @@ app.get('/*', async (req, res) => {
 			console.error(err.name, err.message)
 		}
 	})
-
+})
 server.listen(7782, () => console.log('listening on 7781'))
