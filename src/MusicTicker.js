@@ -22,23 +22,31 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQBi2auvbHVAUHcJZ3-N7wITOBGqo9u82VnWXcUq-QI64M2EMjC0uKf8nJIRFLdrkYZVR_GiKStva9uvK8kXUKoIy45iyB8p6uHXsDhS78u1VSJZyAv7JDfLfE5TdWw2HATuaui-P7qBmPBlsUOLH-zpjdIE',
+		'BQBkCfdf4fHpSBYh7_7wuXgaIyaDqjzHxpiOk9e55sxqvS7ZLPjZnUqxlvnxTH2lbekRUiPqNBmAQg4lP_WGnn_vKczNPiNtkDVFnIdyFkT7q-B4pnPx7IGdziK0VM3y5CneKa0tB-H-zTufCB8b0Y-Ljb1b',
 	)
 
 	useEffect(() => {
 		const fetchAccessAuthorizationFromUser = async () => {}
 		const fetchAccessAndRefreshTokens = async code => {
 			try {
-				const response = await fetch('https://travisk.info/current-music')
-				const json = await response.json()
+				const response = await fetch(
+					'https://travisk.info/current-music/login',
+					{
+						headers: {
+							'Access-Control-Allow-Origin': '*',
+						},
+					},
+				)
+				const json = response.body
 				console.log(json)
+				return json
 			} catch (e) {
 				console.log('could not fetch access token')
 				console.error(e.name + ': ' + e.message)
 				return 'fetchAccessToken error'
 			}
 		}
-		const accessResponse = fetchAccessAuthorizationFromUser()
+		const accessResponse = fetchAccessAndRefreshTokens()
 		console.log(accessResponse)
 		//const tokenResponse = fetchAccessAndRefreshTokens(accessResponse)
 	}, [])
