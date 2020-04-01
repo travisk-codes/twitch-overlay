@@ -22,19 +22,14 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQBkCfdf4fHpSBYh7_7wuXgaIyaDqjzHxpiOk9e55sxqvS7ZLPjZnUqxlvnxTH2lbekRUiPqNBmAQg4lP_WGnn_vKczNPiNtkDVFnIdyFkT7q-B4pnPx7IGdziK0VM3y5CneKa0tB-H-zTufCB8b0Y-Ljb1b',
+		'BQAPbJeWX4eZ6S05RelnFa7ig8rGH6q349lxgdPFV8PN_4aVxSrcNjNpLmeSmLjMoQQrvKX9KjYvzYNHs9cVmSXVij8Tc64ugsxFKwClgKQ4q0HC437BrLY39UzfwYE3w9Ofg_dSzvPXZieQor59fGoNDJ-I',
 	)
 
 	useEffect(() => {
 		const fetchAccessAuthorizationFromUser = async () => {}
 		const fetchAccessAndRefreshTokens = async code => {
 			try {
-				const response = await fetch(
-					'https://travisk.info/current-music/login',
-					{
-						mode: 'no-cors',
-					},
-				)
+				const response = await fetch('https://travisk.info/current-music/login')
 				const json = response
 				console.log(json)
 				return json
@@ -121,7 +116,7 @@ const MusicTicker = () => {
 		}
 	}
 
-	//useInterval(fetchCurrentMusic, 5000)
+	useInterval(fetchCurrentMusic, 5000)
 
 	const { song, artist, album } = currentMusic
 

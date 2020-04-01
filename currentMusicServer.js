@@ -91,8 +91,6 @@ app.get('/callback', function(req, res) {
 				var options = {
 					url: 'https://api.spotify.com/v1/me/player',
 					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
 						Authorization: 'Bearer ' + access_token,
 					},
 					json: true,
@@ -100,12 +98,12 @@ app.get('/callback', function(req, res) {
 
 				// use the access token to access the Spotify Web API
 				request.get(options, function(error, response, body) {
-					res.send(body)
+					console.log(body)
 				})
 
 				// we can also pass the token to the browser to make requests from there
 				res.redirect(
-					'/overlay' +
+					'/overlay?' +
 						querystring.stringify({
 							access_token: access_token,
 							refresh_token: refresh_token,
@@ -113,7 +111,7 @@ app.get('/callback', function(req, res) {
 				)
 			} else {
 				res.redirect(
-					'/overlay' +
+					'/overlay?' +
 						querystring.stringify({
 							error: 'invalid_token',
 						}),

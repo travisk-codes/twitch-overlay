@@ -6,11 +6,11 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'trying to get spotify auth flow working',
-	'then later': 'maybe short article on ticker text solution?',
+	'doing now': 'correctly calling the Spotify API',
+	'then later': 'in-overlay form to edit overlay text',
 	announcement: 'this_is_fine.gif',
-	'avg followers': '1.9',
-	'current status': ' coffee has me going yet!',
+	'avg followers': '1.93',
+	'current status': ' kind of out of it tbh',
 }
 
 const socket = socketIOClient('http://localhost:7781')
@@ -198,11 +198,11 @@ function App() {
 				</div>
 			</div>
 			<div className='drop-shadow' id='camera-box' />
-			{/* 			<div className='drop-shadow' id='screen-box' />
+			<div className='drop-shadow' id='screen-box' />
 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
- */}{' '}
+
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
