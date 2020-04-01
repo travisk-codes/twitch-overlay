@@ -29,7 +29,14 @@ const MusicTicker = () => {
 		const fetchAccessAuthorizationFromUser = async () => {}
 		const fetchAccessAndRefreshTokens = async code => {
 			try {
-				const response = await fetch('https://travisk.info/current-music/login')
+				const response = await fetch(
+					'https://travisk.info/current-music/login',
+					{
+						headers: {
+							'Access-Control-Allow-Origin': '*',
+						},
+					},
+				)
 				const json = await response.json()
 				console.log(json)
 				return json
