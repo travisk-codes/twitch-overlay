@@ -136,6 +136,14 @@
 	top: 50px;
 }
 
+#single {
+	position: fixed;
+	left: 30px;
+	right: 30px;
+	top: 50px;
+	bottom: 50px;
+}
+
 /* .current-status {
 	position: fixed;
 	bottom: 12px;
