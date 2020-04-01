@@ -30,7 +30,7 @@ const MusicTicker = () => {
 		const fetchAccessAndRefreshTokens = async code => {
 			try {
 				const response = await fetch('https://travisk.info/current-music/login')
-				const json = response
+				const json = await response.json()
 				console.log(json)
 				return json
 			} catch (e) {

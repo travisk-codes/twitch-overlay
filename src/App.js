@@ -198,11 +198,11 @@ function App() {
 				</div>
 			</div>
 			<div className='drop-shadow' id='camera-box' />
-			<div className='drop-shadow' id='screen-box' />
+			{/* 			<div className='drop-shadow' id='screen-box' />
 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
-
+ */}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
