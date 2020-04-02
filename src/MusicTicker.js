@@ -22,7 +22,7 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQAPbJeWX4eZ6S05RelnFa7ig8rGH6q349lxgdPFV8PN_4aVxSrcNjNpLmeSmLjMoQQrvKX9KjYvzYNHs9cVmSXVij8Tc64ugsxFKwClgKQ4q0HC437BrLY39UzfwYE3w9Ofg_dSzvPXZieQor59fGoNDJ-I',
+		'BQC2Xj6EUJeAYP6GINPCcpGwHnQMZFI0mpJtlbMHKFNL-L4gzI38HBPxcZ7WSLHnkJjwXME8FTvUl9P1-U8tKDHJLR2xHayUbxVZljn1y9KzqieWn64KNQeF5quKoaUX6BZGO_qiBztO8j0qKneYVxzSMgdV',
 	)
 
 	useEffect(() => {
@@ -131,13 +131,14 @@ const MusicTicker = () => {
 		'🎵 ',
 		' Now Playing ',
 		' 🎵 ',
-		!song ? 'Nothing' : ` "${song}" by ${artist} from the album "${album}"`,
+		!song
+			? '"4\'33\'\'" by John Cage from the album "Sonatas and Interludes"'
+			: ` "${song}" by ${artist} from the album "${album}"`,
 	]
 
 	return (
 		<div className='ticker-wrap-music'>
 			<div className='ticker-music'>
-				<TickerItem textArray={textArray} />
 				<TickerItem textArray={textArray} />
 				<TickerItem textArray={textArray} />
 			</div>

@@ -16,7 +16,7 @@ const socket = io(server, { origins: '*:*' })
 const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
 
 const webhookConfig = {
-	hostName: 'accd7378.ngrok.io',
+	hostName: '1ffba402.ngrok.io',
 	port: 8090,
 	reverseProxy: { port: 443, ssl: true },
 }

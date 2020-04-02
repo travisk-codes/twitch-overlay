@@ -6,11 +6,12 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'terrorizing or freedom-fighting, regardless',
-	'then later': "maybe more coding I dunno I'm pretty tired",
+	'doing now':
+		'trying to understand Spotify auth flow, or adding an in-overlay editor',
+	'then later': 'probably more of the same',
 	announcement: 'this_is_fine.gif',
 	'avg followers': '1.93',
-	'current status': ' kind of out of it tbh',
+	'current status': ' tired, so tired',
 }
 
 const socket = socketIOClient('http://localhost:7781')
@@ -198,12 +199,12 @@ function App() {
 				</div>
 			</div>
 			<div className='drop-shadow' id='camera-box' />
-			{/* 			<div className='drop-shadow' id='screen-box' />
+			<div className='drop-shadow' id='screen-box' />
 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
- */}{' '}
-			<div className='drop-shadow' id='single' />
+			{/* 			<div className='drop-shadow' id='single' />
+			 */}{' '}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
@@ -212,7 +213,7 @@ function App() {
 			<MusicTicker />
 			<div className='ticker-wrap-current-status'>
 				<div className='ticker-current-status'>
-					{[0, 1].map(i => (
+					{[0, 1, 2].map(i => (
 						<TickerItem
 							key={i}
 							textArray={[
