@@ -6,12 +6,11 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now':
-		'trying to understand Spotify auth flow, or adding an in-overlay editor',
-	'then later': 'probably more of the same',
+	'doing now': 'fighting imperialist western dogs, or freedom hating ',
+	'then later': 'overlay editor or spotify api',
 	announcement: 'this_is_fine.gif',
-	'avg followers': '1.93',
-	'current status': ' tired, so tired',
+	'avg followers': '2.1',
+	'current status': " getting tired but still feelin'n it",
 }
 
 const socket = socketIOClient('http://localhost:7781')
@@ -44,10 +43,7 @@ const TimeTextArray = () => {
 		// US NC RA 20 03 09 13 00
 		let year = date.getFullYear() % 2000
 		let month = (date.getMonth() + 1).toString().padStart(2, '0')
-		let day = date
-			.getDate()
-			.toString()
-			.padStart(2, '0')
+		let day = date.getDate().toString().padStart(2, '0')
 		return [
 			'🕒',
 			'EA',
@@ -57,18 +53,9 @@ const TimeTextArray = () => {
 			year + ' ',
 			month + ' ',
 			day + ' ',
-			date
-				.getHours()
-				.toString()
-				.padStart(2, '0') + ' ',
-			date
-				.getMinutes()
-				.toString()
-				.padStart(2, '0') + ' ',
-			date
-				.getSeconds()
-				.toString()
-				.padStart(2, '0'),
+			date.getHours().toString().padStart(2, '0') + ' ',
+			date.getMinutes().toString().padStart(2, '0') + ' ',
+			date.getSeconds().toString().padStart(2, '0'),
 		]
 	}
 
@@ -112,10 +99,10 @@ function App() {
 	React.useEffect(() => {
 		console.log('called App useEffect')
 
-		socket.on('follows', data => {
-			setFollowers(data.map(datum => datum._data.from_name))
+		socket.on('follows', (data) => {
+			setFollowers(data.map((datum) => datum._data.from_name))
 		})
-		socket.on('streamTitleChange', data => setStreamTitle(data))
+		socket.on('streamTitleChange', (data) => setStreamTitle(data))
 	}, [followers, streamTitle])
 
 	const tickerItems = [
@@ -157,7 +144,7 @@ function App() {
 		{
 			textArray: [
 				'👀',
-				`${textEntries['avg followers']}/3 average viewers (over half-way there!)`,
+				`${textEntries['avg followers']}/3 average viewers (!!!)`,
 			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
@@ -166,7 +153,7 @@ function App() {
 
 	const bottomTextFollowers = followers.map((follower, i) => ({
 		textArray: ['♥ ', ' ' + follower],
-		color: `hsl(${i * 40}, 100%, 75%)`,
+		color: `hsl(${i * 50 + 300}, 100%, 75%)`,
 		isFullyColored: false,
 	}))
 
@@ -200,10 +187,11 @@ function App() {
 			</div>
 			<div className='drop-shadow' id='camera-box' />
 			<div className='drop-shadow' id='screen-box' />
-			<div className='drop-shadow' id='terminal' />
+			{/* 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
-			{/* 			<div className='drop-shadow' id='single' />
+ */}{' '}
+			{/* 						<div className='drop-shadow' id='single' />
 			 */}{' '}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
@@ -213,7 +201,7 @@ function App() {
 			<MusicTicker />
 			<div className='ticker-wrap-current-status'>
 				<div className='ticker-current-status'>
-					{[0, 1, 2].map(i => (
+					{[0, 1, 2].map((i) => (
 						<TickerItem
 							key={i}
 							textArray={[

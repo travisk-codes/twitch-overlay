@@ -33,12 +33,18 @@ app
 	.use(cors())
 	.use(cookieParser())
 
+app.get('/', (req, res) => {
+	res.header('Access-Control-Allow-Origin', '*')
+	res.redirect('/login')
+})
+
 app.get('/login', function(req, res) {
 	var state = generateRandomString(16)
 	res.cookie(stateKey, state)
 
 	// your application requests authorization
 	var scope = 'user-read-playback-state'
+	res.header('Access-Control-Allow-Origin', '*')
 	res.redirect(
 		'https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
@@ -76,6 +82,7 @@ app.get('/callback', function(req, res) {
 				grant_type: 'authorization_code',
 			},
 			headers: {
+				'Access-Control-Allow-Origin': '*',
 				Authorization:
 					'Basic ' +
 					new Buffer(client_id + ':' + client_secret).toString('base64'),
@@ -87,32 +94,32 @@ app.get('/callback', function(req, res) {
 			if (!error && response.statusCode === 200) {
 				var access_token = body.access_token,
 					refresh_token = body.refresh_token
-
 				var options = {
 					url: 'https://api.spotify.com/v1/me/player',
 					headers: {
 						Authorization: 'Bearer ' + access_token,
+						'Access-Control-Allow-Origin': '*',
 					},
 					json: true,
 				}
 
 				// use the access token to access the Spotify Web API
 				request.get(options, function(error, response, body) {
-					const { name, album } = body.item
+					res.json(body)
+					/*const { name, album } = body.item
 					res.json({
 						song: name,
 						artist: album.artists[0].name,
 						album: album.name,
-					})
-					/* 					res.redirect(
+ 					})
+					res.redirect(
 						'/overlay?' +
 							querystring.stringify({
 								song: name,
 								artist: album.artists[0].name,
 								album: album.name,
 							}),
-					)
- */
+					)*/
 				})
 
 				// we can also pass the token to the browser to make requests from there
