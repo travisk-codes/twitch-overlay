@@ -6,7 +6,7 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'fighting imperialist western dogs, or freedom hating ',
+	'doing now': 'fighting imperialist western pigs or freedom hating dogs',
 	'then later': 'overlay editor or spotify api',
 	announcement: 'this_is_fine.gif',
 	'avg followers': '2.1',
@@ -191,8 +191,7 @@ function App() {
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />
  */}{' '}
-			{/* 						<div className='drop-shadow' id='single' />
-			 */}{' '}
+			<div className='drop-shadow' id='single' />{' '}
 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />

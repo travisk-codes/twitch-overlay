@@ -98,16 +98,16 @@
 
 #camera-box {
 	position: fixed;
-	width: 423px;
-	height: 312px;
+	width: 320px;
+	height: 240px;
 	right: 30px;
 	bottom: 50px;
 }
 
 #screen-box {
 	position: fixed;
-	width: 423px;
-	height: 237px;
+	width: 320px;
+	height: 180px;
 	right: 30px;
 	top: 50px;
 }
