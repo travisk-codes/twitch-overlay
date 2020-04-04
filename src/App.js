@@ -6,10 +6,10 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'fighting for our freedom to tell others how to live',
-	'then later': 'probably more of the same',
-	announcement: 'this_is_fine.gif',
-	'avg followers': '1.93',
+	'doing now': 'trying to get all overlay features working via server',
+	'then later': "fightin' for freedums pew pew pew!",
+	announcement: 'human contact is sooo 2019',
+	'avg followers': '2.1',
 	'current status': ' are you feeling it now, mr krabs?',
 }
 
@@ -155,7 +155,7 @@ function App() {
 		{
 			textArray: [
 				'👀',
-				`${textEntries['avg followers']}/3 average viewers (over half-way there!)`,
+				`${textEntries['avg followers']}/3 average viewers (!!!)`,
 			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
@@ -220,11 +220,11 @@ function App() {
 			</div>
 			<div className='drop-shadow' id='camera-box' />
 			<div className='drop-shadow' id='screen-box' />
-			{/* 			<div className='drop-shadow' id='terminal' />
+			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
-			<div className='drop-shadow' id='browser' />
- */}{' '}
-			<div className='drop-shadow' id='single' />{' '}
+			<div className='drop-shadow' id='browser' />{' '}
+			{/* 			<div className='drop-shadow' id='single' />{' '}
+			 */}{' '}
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
 					<BottomTickerItems />
