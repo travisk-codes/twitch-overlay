@@ -6,11 +6,11 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'fighting imperialist western pigs or freedom hating dogs',
-	'then later': 'overlay editor or spotify api',
+	'doing now': 'fighting for our freedom to tell others how to live',
+	'then later': 'probably more of the same',
 	announcement: 'this_is_fine.gif',
-	'avg followers': '2.1',
-	'current status': " getting tired but still feelin'n it",
+	'avg followers': '1.93',
+	'current status': ' are you feeling it now, mr krabs?',
 }
 
 const socket = socketIOClient('http://localhost:7781')
@@ -78,10 +78,19 @@ const Emoji = ({ emoji }) => (
 	</span>
 )
 
-export const TickerItem = ({ textArray, color, isFullyColored, className }) => (
+export const TickerItem = ({
+	textArray,
+	color,
+	isFullyColored,
+	className,
+	noSpacing,
+}) => (
 	<div
 		className={`ticker__item text ${className}`}
-		style={{ color: isFullyColored ? color : null }}>
+		style={{
+			color: isFullyColored ? color : null,
+			padding: noSpacing ? '0 10px' : '0 30px',
+		}}>
 		<Emoji emoji={textArray[0]} />
 		&nbsp;
 		<span style={{ color }}>{textArray[1]}</span>
@@ -95,6 +104,8 @@ export const TickerItem = ({ textArray, color, isFullyColored, className }) => (
 function App() {
 	const [followers, setFollowers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
+	const [input, setInput] = React.useState('')
+	const [isEditorOpen, setEditorOpen] = React.useState(false)
 
 	React.useEffect(() => {
 		console.log('called App useEffect')
@@ -105,7 +116,7 @@ function App() {
 		socket.on('streamTitleChange', (data) => setStreamTitle(data))
 	}, [followers, streamTitle])
 
-	const tickerItems = [
+	const topTickerItems = [
 		{
 			textArray: ['', '', streamTitle],
 			color: 'purple',
@@ -144,32 +155,54 @@ function App() {
 		{
 			textArray: [
 				'👀',
-				`${textEntries['avg followers']}/3 average viewers (!!!)`,
+				`${textEntries['avg followers']}/3 average viewers (over half-way there!)`,
 			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
 		},
 	]
 
-	const bottomTextFollowers = followers.map((follower, i) => ({
-		textArray: ['♥ ', ' ' + follower],
-		color: `hsl(${i * 50 + 300}, 100%, 75%)`,
-		isFullyColored: false,
-	}))
+	const bottomTextFollowers = followers
+		.filter((text, i) => i < 3)
+		.map((follower, i) => [' ♥   ', ' ' + follower])
 
-	const bottomTextItems = [
+	const bottomTickerItems = [
 		{
-			textArray: ['♥ ', 'Newest Followers'],
+			textArray: [' ♥ ', 'Newest Followers', ...bottomTextFollowers],
+			color: 'violet',
+			isFullyColored: false,
+		},
+		{
+			textArray: MusicTicker(),
 			color: 'white',
 			isFullyColored: false,
 		},
-		...bottomTextFollowers,
+		{
+			textArray: [
+				'👩🏼 ',
+				' Current Status ',
+				' 🤔 ',
+				textEntries['current status'],
+			],
+			color: '#ff5090',
+			isFullyColored: false,
+		},
 	]
 
-	const TickerItems = () => (
+	const TopTickerItems = () => (
 		<>
 			<TimeTextArray />
-			{tickerItems.map((props, i) => (
+			{topTickerItems.map((props, i) => (
+				<span key={i}>
+					<TickerItem {...props} />
+				</span>
+			))}
+		</>
+	)
+
+	const BottomTickerItems = () => (
+		<>
+			{bottomTickerItems.map((props, i) => (
 				<span key={i}>
 					<TickerItem {...props} />
 				</span>
@@ -181,8 +214,8 @@ function App() {
 		<div className='App'>
 			<div className='ticker-wrap'>
 				<div className='ticker'>
-					<TickerItems />
-					<TickerItems />
+					<TopTickerItems />
+					<TopTickerItems />
 				</div>
 			</div>
 			<div className='drop-shadow' id='camera-box' />
@@ -192,7 +225,15 @@ function App() {
 			<div className='drop-shadow' id='browser' />
  */}{' '}
 			<div className='drop-shadow' id='single' />{' '}
-			<div className='bottom-text'>
+			<div className='ticker-wrap-bottom'>
+				<div className='ticker-bottom'>
+					<BottomTickerItems />
+					<BottomTickerItems />
+					<BottomTickerItems />
+					<BottomTickerItems />
+				</div>
+			</div>
+			{/* 			<div className='bottom-text'>
 				{bottomTextItems.map((props, i) => (
 					<TickerItem key={i} {...props} />
 				))}
@@ -215,6 +256,24 @@ function App() {
 						/>
 					))}
 				</div>
+			</div>
+ */}{' '}
+			<button
+				onClick={() => setEditorOpen(!isEditorOpen)}
+				className='editor-button'>
+				Edit
+			</button>
+			<div
+				style={{ visibility: isEditorOpen ? 'visible' : 'hidden' }}
+				className='editor'>
+				<form>
+					<input
+						className='ticker-text-input'
+						placeholder='yay'
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+					/>
+				</form>
 			</div>
 		</div>
 	)

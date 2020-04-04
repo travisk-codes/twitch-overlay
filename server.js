@@ -16,7 +16,7 @@ const socket = io(server, { origins: '*:*' })
 const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
 
 const webhookConfig = {
-	hostName: '23c381c1.ngrok.io',
+	hostName: '4e34ed12.ngrok.io',
 	port: 8090,
 	reverseProxy: { port: 443, ssl: true },
 }
@@ -57,7 +57,7 @@ const onNewFollow = (follow = HelixFollow) => {
 	}
 }
 
-socket.on('connection', async socket => {
+socket.on('connection', async (socket) => {
 	console.log('websocket connection established with client')
 	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
 		followedUser: userId,

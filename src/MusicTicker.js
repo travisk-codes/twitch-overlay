@@ -22,11 +22,11 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQCFVVAa4e9OJqEv-OqstqmHCZcxl3PWS3nkG-XeYO388_Qwo9N5il_EDJpC1d6avFWxOsuPCH_NCFB0fUULxABDjZQXnibX_5Aw5tNjqw8fHoG6Eriy9Mg9PFquUnZhsLDrOj499hP_nUvb0HbBeDVKMh9K',
+		'BQC2Xj6EUJeAYP6GINPCcpGwHnQMZFI0mpJtlbMHKFNL-L4gzI38HBPxcZ7WSLHnkJjwXME8FTvUl9P1-U8tKDHJLR2xHayUbxVZljn1y9KzqieWn64KNQeF5quKoaUX6BZGO_qiBztO8j0qKneYVxzSMgdV',
 	)
 
 	useEffect(() => {
-		//const fetchAccessAuthorizationFromUser = async () => {}
+		const fetchAccessAuthorizationFromUser = async () => {}
 		const fetchAccessAndRefreshTokens = async (code) => {
 			try {
 				const response = await fetch(
@@ -46,8 +46,8 @@ const MusicTicker = () => {
 				return 'fetchAccessToken error'
 			}
 		}
-		//const accessResponse = fetchAccessAndRefreshTokens()
-		//console.log(accessResponse)
+		const accessResponse = fetchAccessAndRefreshTokens()
+		console.log(accessResponse)
 		//const tokenResponse = fetchAccessAndRefreshTokens(accessResponse)
 	}, [])
 
@@ -104,7 +104,6 @@ const MusicTicker = () => {
 				'Content-Type': 'application/json',
 				Authorization: 'Bearer ' + accessToken,
 			},
-			mode: 'cors',
 		}
 		try {
 			const response = await fetch(
@@ -112,7 +111,6 @@ const MusicTicker = () => {
 				requestOptions,
 			)
 			const json = await response.json()
-			console.log(response)
 			const { name, album } = json.item
 			setCurrentMusic({
 				song: name,
@@ -121,11 +119,11 @@ const MusicTicker = () => {
 			})
 		} catch (e) {
 			console.warn(e.name + ': ' + e.message)
-			//setAccessToken(await fetchAccessAndRefreshTokens())
+			setAccessToken(await fetchAccessAndRefreshTokens())
 		}
 	}
 
-	useInterval(fetchCurrentMusic, 5000)
+	//useInterval(fetchCurrentMusic, 5000)
 
 	const { song, artist, album } = currentMusic
 
@@ -138,14 +136,7 @@ const MusicTicker = () => {
 			: ` "${song}" by ${artist} from the album "${album}"`,
 	]
 
-	return (
-		<div className='ticker-wrap-music'>
-			<div className='ticker-music'>
-				<TickerItem textArray={textArray} />
-				<TickerItem textArray={textArray} />
-			</div>
-		</div>
-	)
+	return textArray
 }
 
 export default MusicTicker

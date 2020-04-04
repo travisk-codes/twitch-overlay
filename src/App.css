@@ -16,6 +16,16 @@
 	}
 }
 
+@keyframes ticker-reverse {
+	0% {
+		transform: translate3d(-50%, 0, 0);
+		visibility: visible;
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+}
+
 @keyframes three-ticker {
 	0% {
 		transform: translate3d(0, 0, 0);
@@ -32,7 +42,8 @@
 	width: 100%;
 	overflow: hidden;
 	padding-top: 10px;
-	height: 50px;
+	height: 100px;
+	padding-left: 0%;
 	box-sizing: content-box;
 }
 
@@ -42,6 +53,29 @@
 	padding-right: 0%;
 	box-sizing: content-box;
 	animation-name: ticker;
+	animation-iteration-count: infinite;
+	animation-duration: 60s;
+	animation-timing-function: linear;
+}
+
+.ticker-wrap-bottom {
+	position: fixed;
+	width: 100%;
+	overflow: hidden;
+	padding-top: 10px;
+	padding-left: 0%;
+	box-sizing: content-box;
+
+	bottom: 0px;
+	padding-bottom: 12px;
+}
+
+.ticker-bottom {
+	display: inline-block;
+	white-space: nowrap;
+	padding-right: 0%;
+	box-sizing: content-box;
+	animation-name: ticker-reverse;
 	animation-iteration-count: infinite;
 	animation-duration: 60s;
 	animation-timing-function: linear;
@@ -98,16 +132,16 @@
 
 #camera-box {
 	position: fixed;
-	width: 320px;
-	height: 240px;
+	width: 423px;
+	height: 312px;
 	right: 30px;
 	bottom: 50px;
 }
 
 #screen-box {
 	position: fixed;
-	width: 320px;
-	height: 180px;
+	width: 423px;
+	height: 237px;
 	right: 30px;
 	top: 50px;
 }
@@ -115,7 +149,7 @@
 #terminal {
 	position: fixed;
 	width: 423px;
-	height: 732px;
+	height: 722px;
 	right: 30px;
 	top: 316px;
 }
@@ -143,14 +177,6 @@
 	top: 50px;
 	bottom: 50px;
 }
-
-/* .current-status {
-	position: fixed;
-	bottom: 12px;
-	white-space: nowrap;
-	width: 435px;
-	right: 50px;
-} */
 
 .ticker-wrap-current-status {
 	position: fixed;
@@ -199,7 +225,7 @@
 .text {
 	color: hsl(0, 0%, 100%);
 	font-size: 22px;
-	text-shadow: 0px 5px 15px black, 1px 1px black; /* -2px 0px black, 0px 2px black, 0px -2px black,
+	text-shadow: 0px 10px 30px black, 0px 1px black; /*, -2px 0px black, 0px 2px black, 0px -2px black,
 		2px 2px black, -2px -2px black, -2px 2px black, 2px -2px black;*/
 }
 
@@ -207,4 +233,33 @@
 	/* 	background-color: #ff0000bb;
  */
 	box-shadow: 0px 10px 30px 0px #000000aa;
+}
+
+.editor {
+	position: fixed;
+	width: 1165px;
+	bottom: 50px;
+	left: 30px;
+	top: 50px;
+	padding: 10px;
+	background-color: #fafafa;
+}
+
+.editor-button {
+	font-size: 1em;
+	position: fixed;
+	right: 40px;
+	bottom: 60px;
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	z-index: 1;
+}
+
+input {
+	padding: 0.25em;
+	border: 1px solid grey;
+}
+
+.bottom {
 }
