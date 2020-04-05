@@ -220,11 +220,11 @@ function App() {
 			</div>
 			<div className='drop-shadow' id='camera-box' />
 			<div className='drop-shadow' id='screen-box' />
-			<div className='drop-shadow' id='terminal' />
+			{/* 			<div className='drop-shadow' id='terminal' />
 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />{' '}
-			{/* 			<div className='drop-shadow' id='single' />{' '}
-			 */}{' '}
+ */}{' '}
+			<div className='drop-shadow' id='single' />{' '}
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
 					<BottomTickerItems />
