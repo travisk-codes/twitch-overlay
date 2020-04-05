@@ -6,8 +6,8 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'trying to get all overlay features working via server',
-	'then later': "fightin' for freedums pew pew pew!",
+	'doing now': 'fighting for freedom, regardless',
+	'then later': 'more time trying to get twitch overlay working :(',
 	announcement: 'human contact is sooo 2019',
 	'avg followers': '2.1',
 	'current status': ' are you feeling it now, mr krabs?',
