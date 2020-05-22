@@ -15,14 +15,13 @@ import { TickerItem } from './App'
  */
 
 const MusicTicker = () => {
-	console.log('called MusicTicker')
 	const [currentMusic, setCurrentMusic] = useState({
 		song: '',
 		artist: '',
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQC2Xj6EUJeAYP6GINPCcpGwHnQMZFI0mpJtlbMHKFNL-L4gzI38HBPxcZ7WSLHnkJjwXME8FTvUl9P1-U8tKDHJLR2xHayUbxVZljn1y9KzqieWn64KNQeF5quKoaUX6BZGO_qiBztO8j0qKneYVxzSMgdV',
+		'BQAnx0ZQQTa5LN71Dl8tNEyvcrK4MJfumF8tyEwL5r4Ni0TQJQscVoHiTWjRKLFhBLvucPOgVvM3ZWflU_jOTIAozwHqPp94P_Vv-Zmii4lQM-Tg82oP0pS_ongW7ht_p_EInAdIdgXr0FjE9uTwIGBJ2P3K',
 	)
 
 	useEffect(() => {
@@ -38,7 +37,6 @@ const MusicTicker = () => {
 					},
 				)
 				const json = await response.json()
-				console.log(json)
 				return json
 			} catch (e) {
 				console.log('could not fetch access token')
@@ -52,7 +50,6 @@ const MusicTicker = () => {
 	}, [])
 
 	const useInterval = (callback, delay) => {
-		console.log('called useInterval')
 		const savedCallback = React.useRef()
 
 		// Remember the latest callback.
@@ -97,7 +94,6 @@ const MusicTicker = () => {
 	}
 
 	const fetchCurrentMusic = async () => {
-		console.log('called fetchCurrentMusic')
 		const requestOptions = {
 			method: 'GET',
 			headers: {
@@ -123,7 +119,7 @@ const MusicTicker = () => {
 		}
 	}
 
-	//useInterval(fetchCurrentMusic, 5000)
+	useInterval(fetchCurrentMusic, 5000)
 
 	const { song, artist, album } = currentMusic
 
@@ -132,7 +128,7 @@ const MusicTicker = () => {
 		' Now Playing ',
 		' 🎵 ',
 		!song
-			? '"4\'33\'\'" by John Cage from the album "Sonatas and Interludes"'
+			? 'either YouTube or nothing'
 			: ` "${song}" by ${artist} from the album "${album}"`,
 	]
 

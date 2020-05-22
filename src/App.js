@@ -6,11 +6,13 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'fighting for freedom, regardless',
-	'then later': 'more time trying to get twitch overlay working :(',
-	announcement: 'human contact is sooo 2019',
-	'avg followers': '2.1',
-	'current status': ' are you feeling it now, mr krabs?',
+	'doing now': 'writing tests for the input in my datum app',
+	'then later': "I'll feel it out",
+	announcement1: 'Pull down with your diaphram, not up with your chest',
+	announcement2: "If you think you might be dehydrated, you're dehydrated",
+	'avg followers': '3.3',
+	'current status':
+		' Mood: 4/6, Anxiety: 3/6, Energy (Mental): 3/6, Energy (Physical): 3/6',
 }
 
 const socket = socketIOClient('http://localhost:7781')
@@ -60,7 +62,24 @@ const TimeTextArray = () => {
 	}
 
 	useInterval(() => {
-		setTextArray(getTimeTextArray())
+		let array = getTimeTextArray()
+		if (!array.length) {
+			textArray = [
+				'🕒',
+				'EA',
+				'US ',
+				'NC ',
+				'RA ',
+				'00 ',
+				'00 ',
+				'00 ',
+				'00 ',
+				'00 ',
+				'00',
+			]
+		}
+
+		setTextArray(array)
 	}, 1000)
 
 	return (
@@ -106,6 +125,53 @@ function App() {
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
 	const [input, setInput] = React.useState('')
 	const [isEditorOpen, setEditorOpen] = React.useState(false)
+	const [textArray, setTextArray] = React.useState([])
+
+	function useInterval(callback, delay) {
+		const savedCallback = React.useRef()
+
+		// Remember the latest callback.
+		React.useEffect(() => {
+			savedCallback.current = callback
+		}, [callback])
+
+		// Set up the interval.
+		React.useEffect(() => {
+			function tick() {
+				savedCallback.current()
+			}
+			if (delay !== null) {
+				let id = setInterval(tick, delay)
+				return () => clearInterval(id)
+			}
+		}, [delay])
+	}
+
+	function getTimeTextArray() {
+		const date = new Date()
+		// US NC RA 20 03 09 13 00
+		let year = date.getFullYear() % 2000
+		let month = (date.getMonth() + 1).toString().padStart(2, '0')
+		let day = date.getDate().toString().padStart(2, '0')
+		return [
+			'🕒',
+			'EA',
+			'US ',
+			'NC ',
+			'RA ',
+			year + ' ',
+			month + ' ',
+			day + ' ',
+			date.getHours().toString().padStart(2, '0') + ' ',
+			date.getMinutes().toString().padStart(2, '0') + ' ',
+			date.getSeconds().toString().padStart(2, '0'),
+		]
+	}
+
+	useInterval(() => {
+		let array = getTimeTextArray()
+		setTextArray(array)
+	}, 1000)
 
 	React.useEffect(() => {
 		console.log('called App useEffect')
@@ -114,9 +180,16 @@ function App() {
 			setFollowers(data.map((datum) => datum._data.from_name))
 		})
 		socket.on('streamTitleChange', (data) => setStreamTitle(data))
+
+		return () => socket.off('')
 	}, [followers, streamTitle])
 
 	const topTickerItems = [
+		{
+			textArray,
+			color: 'lightskyblue',
+			isFullyColored: true,
+		},
 		{
 			textArray: ['', '', streamTitle],
 			color: 'purple',
@@ -138,12 +211,12 @@ function App() {
 			isFullyColored: false,
 		},
 	 */ {
-			textArray: ['📢', 'Announcement:', textEntries['announcement']],
+			textArray: ['📢', 'Announcement:', textEntries['announcement1']],
 			color: 'red',
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🛣️', 'Road to Affiliate:'],
+			textArray: ['🎉', 'AFFILIATE GET!'],
 			color: 'rgb(150, 255, 150)',
 			isFullyColored: true,
 		},
@@ -155,10 +228,15 @@ function App() {
 		{
 			textArray: [
 				'👀',
-				`${textEntries['avg followers']}/3 average viewers (!!!)`,
+				`${textEntries['avg followers']}/3 average viewers 🧡 Thank You! 🧡`,
 			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
+		},
+		{
+			textArray: ['📢', 'Announcement:', textEntries['announcement2']],
+			color: 'red',
+			isFullyColored: false,
 		},
 	]
 
@@ -168,7 +246,7 @@ function App() {
 
 	const bottomTickerItems = [
 		{
-			textArray: [' ♥ ', 'Newest Followers', ...bottomTextFollowers],
+			textArray: [' ♥ ', 'Latest Followers', ...bottomTextFollowers],
 			color: 'violet',
 			isFullyColored: false,
 		},
@@ -191,7 +269,8 @@ function App() {
 
 	const TopTickerItems = () => (
 		<>
-			<TimeTextArray />
+			{/* 			<TimeTextArray />
+			 */}{' '}
 			{topTickerItems.map((props, i) => (
 				<span key={i}>
 					<TickerItem {...props} />
@@ -220,11 +299,11 @@ function App() {
 			</div>
 			<div className='drop-shadow' id='camera-box' />
 			<div className='drop-shadow' id='screen-box' />
-			{/* 			<div className='drop-shadow' id='terminal' />
-			<div className='drop-shadow' id='vscode' />
+			<div className='drop-shadow' id='terminal' />
+			{/* 			<div className='drop-shadow' id='vscode' />
 			<div className='drop-shadow' id='browser' />{' '}
+						<div className='drop-shadow' id='single' />{' '}
  */}{' '}
-			<div className='drop-shadow' id='single' />{' '}
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
 					<BottomTickerItems />
