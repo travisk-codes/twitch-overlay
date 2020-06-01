@@ -41,7 +41,7 @@
 	top: 0;
 	width: 100%;
 	overflow: hidden;
-	padding-top: 10px;
+	padding-top: 8px;
 	height: 100px;
 	padding-left: 0%;
 	box-sizing: content-box;
@@ -67,7 +67,7 @@
 	box-sizing: content-box;
 
 	bottom: 0px;
-	padding-bottom: 12px;
+	padding-bottom: 8px;
 }
 
 .ticker-bottom {
@@ -130,54 +130,6 @@
 	padding-right: 0px;
 }
 
-#camera-box {
-	position: fixed;
-	width: 423px;
-	height: 312px;
-	right: 30px;
-	bottom: 50px;
-}
-
-#screen-box {
-	position: fixed;
-	width: 423px;
-	height: 237px;
-	right: 30px;
-	top: 50px;
-}
-
-#terminal {
-	position: fixed;
-	width: 423px;
-	height: 732px;
-	right: 30px;
-	top: 316px;
-}
-
-#vscode {
-	position: fixed;
-	width: 848px;
-	bottom: 50px;
-	right: 485px;
-	top: 50px;
-}
-
-#browser {
-	position: fixed;
-	width: 1165px;
-	bottom: 50px;
-	left: 30px;
-	top: 50px;
-}
-
-#single {
-	position: fixed;
-	left: 30px;
-	right: 30px;
-	top: 50px;
-	bottom: 50px;
-}
-
 .ticker-wrap-current-status {
 	position: fixed;
 	bottom: 12px;
@@ -210,7 +162,7 @@
 
 .bottom-text {
 	position: fixed;
-	bottom: 12px;
+	bottom: 10px;
 	white-space: nowrap;
 	left: 300px;
 	overflow: hidden;
@@ -224,16 +176,11 @@
 
 .text {
 	color: hsl(0, 0%, 100%);
-	font-size: 22px;
+	font-size: 16px;
 	text-shadow: 0px 4px 10px black, 1px 1px black; /*, -2px 0px black, 0px 2px black, 0px -2px black,
 		2px 2px black, -2px -2px black, -2px 2px black, 2px -2px black;*/
 }
 
-.drop-shadow {
-	/* 	background-color: #ff0000bb;
- */
-	box-shadow: 0px 10px 30px 0px #000000aa;
-}
 
 .editor {
 	position: fixed;
