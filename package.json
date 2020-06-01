@@ -2,7 +2,7 @@
 	"name": "twitch-overlay",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://travisk.info/overlay",
+	"homepage": "https://overlay.travisk.info",
 	"dependencies": {
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
@@ -12,6 +12,7 @@
 		"react-scripts": "3.4.0",
 		"socket.io": "^2.3.0",
 		"socket.io-client": "^2.3.0",
+		"spotify-web-api-node": "^4.0.0",
 		"twitch": "^4.0.6",
 		"twitch-webhooks": "^4.0.6"
 	},

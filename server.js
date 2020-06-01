@@ -8,15 +8,38 @@ const HelixFollow = require('twitch').HelixFollow
 const HelixStream = require('twitch').HelixStream
 const WebHookListener = require('twitch-webhooks').default
 
+const spotifyWebApi = require('spotify-web-api-node')
+
 const { userId, clientId, secret } = require('./config')
+const {
+	spotifyClientId,
+	clientSecret,
+	redirectURI,
+} = require('./spotifySecrets')
 
 const app = express()
 const server = http.createServer(app)
 const socket = io(server, { origins: '*:*' })
 const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
 
+const spotifyApi = new spotifyWebApi({
+	clientId: spotifyClientId,
+	clientSecret,
+	redirectUri: redirectURI,
+})
+
+spotifyApi
+	.authorizationCodeGrant('PUT_A_CODE_HERE')
+	.then((data) => {
+		spotifyApi.setAccessToken(data.body['access_token'])
+		spotifyApi.setRefreshToken(data.body['refresh_token'])
+		return spotifyApi.getMe()
+	})
+	.then((data) => console.log(data))
+	.catch((err) => console.error('uh oh error', err))
+
 const webhookConfig = {
-	hostName: '02247383.ngrok.io',
+	hostName: 'twitchwebhook.travisk.info',
 	port: 8090,
 	reverseProxy: { port: 443, ssl: true },
 }
@@ -57,22 +80,24 @@ const onNewFollow = (follow = HelixFollow) => {
 	}
 }
 
-socket.on('connection', async (socket) => {
-	console.log('websocket connection established with client')
+socket.on('connection', async (clientSocket) => {
+	console.log('webclientSocket connection established with client')
 	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
 		followedUser: userId,
 	})
 	follows = await paginatedFollows.getAll()
-	socket.emit('follows', follows)
+	clientSocket.emit('follows', follows)
 
 	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
 	if (stream) {
-		socket.emit('streamTitleChange', stream.title)
+		clientSocket.emit('streamTitleChange', stream.title)
 	}
 
-	socket.on('disconnect', async () => {
+	clientSocket.on('disconnect', async () => {
 		try {
 			console.log('disconnected')
+			subscriptions[0].stop()
+			subscriptions[1].stop()
 		} catch (e) {
 			console.log(e)
 		}
@@ -83,5 +108,7 @@ app.use(express.static(path.join(__dirname, 'build')))
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
+
+app.get('/callback')
 
 server.listen(7781, () => console.log('listening on 7781'))

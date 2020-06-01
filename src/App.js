@@ -6,16 +6,16 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'writing tests for the input in my datum app',
-	'then later': "I'll feel it out",
+	'doing now': 'applying for jobs',
+	'then later': "arch linux setup / redoing personal page / getting life together",
 	announcement1: 'Pull down with your diaphram, not up with your chest',
 	announcement2: "If you think you might be dehydrated, you're dehydrated",
-	'avg followers': '3.3',
+	'avg followers': '3.4',
 	'current status':
-		' Mood: 4/6, Anxiety: 3/6, Energy (Mental): 3/6, Energy (Physical): 3/6',
+		' Mood: 3/6, Anxiety: 3/6, Energy (Mental): 3/6, Energy (Physical): 3/6',
 }
 
-const socket = socketIOClient('http://localhost:7781')
+const socket = socketIOClient('https://overlayserver.travisk.info')
 
 const TimeTextArray = () => {
 	const [textArray, setTextArray] = React.useState([])

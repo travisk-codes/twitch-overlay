@@ -1,19 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-import { TickerItem } from './App'
-
-/**
- * - get a token and time until it expires
- * - get a new token before that time elapses
- * - with token, fetch current music every X seconds
- *   ( fetch current music after given song duration )
- *
- * - request current song
- * - schedule request for duration_ms - progress_ms
- * - if 401, fetchAccessToken
- * - then GOTO 10
- */
-
 const MusicTicker = () => {
 	const [currentMusic, setCurrentMusic] = useState({
 		song: '',
@@ -21,7 +7,7 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQAnx0ZQQTa5LN71Dl8tNEyvcrK4MJfumF8tyEwL5r4Ni0TQJQscVoHiTWjRKLFhBLvucPOgVvM3ZWflU_jOTIAozwHqPp94P_Vv-Zmii4lQM-Tg82oP0pS_ongW7ht_p_EInAdIdgXr0FjE9uTwIGBJ2P3K',
+		'BQDpyrOTnfcICcCfzJiBOu6x81FnPR_Om0UI_aGDWnn8c5Ki4y5N0HpdA0hLge97s9U-8pIMy7nOMIg_dOuDq9sZzF5Sbi7lQbv5s3-AF4qbsjaAIl-7XbIt6tdeHBpO6QF9KZmgbXEdsRQ8FUZo1DnihO46C1g7ZSnhf6crMQ',
 	)
 
 	useEffect(() => {
