@@ -6,13 +6,13 @@ import MusicTicker from './MusicTicker'
 import './App.css'
 
 const textEntries = {
-	'doing now': 'applying for jobs',
-	'then later': "arch linux setup / redoing personal page / getting life together",
+	'doing now': 'flash cards for html best practices',
+	'then later': "job applications / email / boring stuff",
 	announcement1: 'Pull down with your diaphram, not up with your chest',
 	announcement2: "If you think you might be dehydrated, you're dehydrated",
 	'avg followers': '3.4',
 	'current status':
-		' Mood: 3/6, Anxiety: 3/6, Energy (Mental): 3/6, Energy (Physical): 3/6',
+		' Mood: 3/6, Anxiety: 3/6, Energy (Mental): 4/6, Energy (Physical): 4/6',
 }
 
 const socket = socketIOClient('https://overlayserver.travisk.info')

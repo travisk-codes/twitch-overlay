@@ -7,7 +7,7 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQDpyrOTnfcICcCfzJiBOu6x81FnPR_Om0UI_aGDWnn8c5Ki4y5N0HpdA0hLge97s9U-8pIMy7nOMIg_dOuDq9sZzF5Sbi7lQbv5s3-AF4qbsjaAIl-7XbIt6tdeHBpO6QF9KZmgbXEdsRQ8FUZo1DnihO46C1g7ZSnhf6crMQ',
+		'BQAjQk1IxiqmuT5VxdlphBEDAlfgHsF7-NHp5GaktQQaCoxt4IdY4xoaBTW4gm8jQ9ZYTstsrCCcSlxfxlCewHPbUwsEoVuSdGNGsWHSAeYHO944_Zz_3TvGmTngZ1LU48XE0D6SY9ApAxIedYUqdoqd46rk36G6pGyiEB12Ig',
 	)
 
 	useEffect(() => {
