@@ -22,4 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-config.jsspotifySecrets.js
+config.js
+spotifySecrets.js

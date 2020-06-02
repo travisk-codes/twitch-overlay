@@ -3,16 +3,17 @@ import socketIOClient from 'socket.io-client'
 
 import MusicTicker from './MusicTicker'
 
+import config from './config'
+
 import './App.css'
 
 const textEntries = {
-	'doing now': 'flash cards for html best practices',
-	'then later': "job applications / email / boring stuff",
+	'doing now': config.doingNow,
+	'then later': config.doingLater,
 	announcement1: 'Pull down with your diaphram, not up with your chest',
 	announcement2: "If you think you might be dehydrated, you're dehydrated",
 	'avg followers': '3.4',
-	'current status':
-		' Mood: 3/6, Anxiety: 3/6, Energy (Mental): 4/6, Energy (Physical): 4/6',
+	'current status': config.currentStatus,
 }
 
 const socket = socketIOClient('https://overlayserver.travisk.info')

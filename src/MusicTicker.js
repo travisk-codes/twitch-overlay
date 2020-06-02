@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import config from './config'
+
 const MusicTicker = () => {
 	const [currentMusic, setCurrentMusic] = useState({
 		song: '',
@@ -7,7 +9,7 @@ const MusicTicker = () => {
 		album: '',
 	})
 	const [accessToken, setAccessToken] = useState(
-		'BQAjQk1IxiqmuT5VxdlphBEDAlfgHsF7-NHp5GaktQQaCoxt4IdY4xoaBTW4gm8jQ9ZYTstsrCCcSlxfxlCewHPbUwsEoVuSdGNGsWHSAeYHO944_Zz_3TvGmTngZ1LU48XE0D6SY9ApAxIedYUqdoqd46rk36G6pGyiEB12Ig',
+		config.spotifyAuth
 	)
 
 	useEffect(() => {
