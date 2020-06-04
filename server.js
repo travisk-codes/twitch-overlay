@@ -2,6 +2,9 @@ const express = require('express')
 const http = require('http')
 const io = require('socket.io')
 const path = require('path')
+const cors = require('cors')
+const querystring = require('querystring')
+const cookieParser = require('cookie-parser')
 
 const TwitchClient = require('twitch').default
 const HelixFollow = require('twitch').HelixFollow
@@ -20,23 +23,14 @@ const {
 const app = express()
 const server = http.createServer(app)
 const socket = io(server, { origins: '*:*' })
-const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
+const twitchClient = TwitchClient.withClientCredentials(
+	clientId,
+	secret,
+)
 
-const spotifyApi = new spotifyWebApi({
-	clientId: spotifyClientId,
-	clientSecret,
-	redirectUri: redirectURI,
-})
-
-spotifyApi
-	.authorizationCodeGrant('PUT_A_CODE_HERE')
-	.then((data) => {
-		spotifyApi.setAccessToken(data.body['access_token'])
-		spotifyApi.setRefreshToken(data.body['refresh_token'])
-		return spotifyApi.getMe()
-	})
-	.then((data) => console.log(data))
-	.catch((err) => console.error('uh oh error', err))
+app.use(express.static(path.join(__dirname, 'build')))
+app.use(cors())
+app.use(cookieParser())
 
 const webhookConfig = {
 	hostName: 'twitchwebhook.travisk.info',
@@ -45,7 +39,10 @@ const webhookConfig = {
 }
 
 async function getWebhookSubscriptions() {
-	const listener = await WebHookListener.create(twitchClient, webhookConfig)
+	const listener = await WebHookListener.create(
+		twitchClient,
+		webhookConfig,
+	)
 	listener.listen()
 	const streamChangeSubscription = await listener.subscribeToStreamChanges(
 		userId,
@@ -81,14 +78,20 @@ const onNewFollow = (follow = HelixFollow) => {
 }
 
 socket.on('connection', async (clientSocket) => {
-	console.log('webclientSocket connection established with client')
-	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
-		followedUser: userId,
-	})
+	console.log(
+		'webclientSocket connection established with client',
+	)
+	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated(
+		{
+			followedUser: userId,
+		},
+	)
 	follows = await paginatedFollows.getAll()
 	clientSocket.emit('follows', follows)
 
-	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
+	const stream = await twitchClient.helix.streams.getStreamByUserId(
+		userId,
+	)
 	if (stream) {
 		clientSocket.emit('streamTitleChange', stream.title)
 	}
@@ -104,11 +107,24 @@ socket.on('connection', async (clientSocket) => {
 	})
 })
 
-app.use(express.static(path.join(__dirname, 'build')))
-app.get('/*', (req, res) => {
+/*app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
+})*/
 
-app.get('/callback')
+app.get('/login', (req, res) => {
+	let state = 'random string'
+	res.cookie('spotifyi_auth_state', state)
+
+	res.redirect(
+		'https://accounts.spotify.com/authorize?' +
+			querystring.stringify({
+				response_type: 'code',
+				client_id: spotifyClientId,
+				scope: 'user-read-currently-playing',
+				redirect_uri: redirectURI,
+				state: state,
+			}),
+	)
+})
 
 server.listen(7781, () => console.log('listening on 7781'))

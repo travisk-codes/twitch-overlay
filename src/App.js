@@ -10,87 +10,17 @@ import './App.css'
 const textEntries = {
 	'doing now': config.doingNow,
 	'then later': config.doingLater,
-	announcement1: 'Pull down with your diaphram, not up with your chest',
-	announcement2: "If you think you might be dehydrated, you're dehydrated",
+	announcement1:
+		'Pull down with your diaphram, not up with your chest',
+	announcement2:
+		"If you think you might be dehydrated, you're dehydrated",
 	'avg followers': '3.4',
 	'current status': config.currentStatus,
 }
 
-const socket = socketIOClient('https://overlayserver.travisk.info')
-
-const TimeTextArray = () => {
-	const [textArray, setTextArray] = React.useState([])
-
-	function useInterval(callback, delay) {
-		const savedCallback = React.useRef()
-
-		// Remember the latest callback.
-		React.useEffect(() => {
-			savedCallback.current = callback
-		}, [callback])
-
-		// Set up the interval.
-		React.useEffect(() => {
-			function tick() {
-				savedCallback.current()
-			}
-			if (delay !== null) {
-				let id = setInterval(tick, delay)
-				return () => clearInterval(id)
-			}
-		}, [delay])
-	}
-
-	function getTimeTextArray() {
-		const date = new Date()
-		// US NC RA 20 03 09 13 00
-		let year = date.getFullYear() % 2000
-		let month = (date.getMonth() + 1).toString().padStart(2, '0')
-		let day = date.getDate().toString().padStart(2, '0')
-		return [
-			'🕒',
-			'EA',
-			'US ',
-			'NC ',
-			'RA ',
-			year + ' ',
-			month + ' ',
-			day + ' ',
-			date.getHours().toString().padStart(2, '0') + ' ',
-			date.getMinutes().toString().padStart(2, '0') + ' ',
-			date.getSeconds().toString().padStart(2, '0'),
-		]
-	}
-
-	useInterval(() => {
-		let array = getTimeTextArray()
-		if (!array.length) {
-			textArray = [
-				'🕒',
-				'EA',
-				'US ',
-				'NC ',
-				'RA ',
-				'00 ',
-				'00 ',
-				'00 ',
-				'00 ',
-				'00 ',
-				'00',
-			]
-		}
-
-		setTextArray(array)
-	}, 1000)
-
-	return (
-		<TickerItem
-			textArray={textArray}
-			color='lightskyblue'
-			isFullyColored={true}
-		/>
-	)
-}
+const socket = socketIOClient(
+	'https://overlayserver.travisk.info',
+)
 
 const Emoji = ({ emoji }) => (
 	<span role='img' aria-label='emoji'>
@@ -110,22 +40,29 @@ export const TickerItem = ({
 		style={{
 			color: isFullyColored ? color : null,
 			padding: noSpacing ? '0 10px' : '0 30px',
-		}}>
+		}}
+	>
 		<Emoji emoji={textArray[0]} />
 		&nbsp;
 		<span style={{ color }}>{textArray[1]}</span>
 		&nbsp;
 		{textArray.map((_, i) =>
-			i > 1 ? <span key={i}>{textArray[i]}&nbsp;</span> : null,
+			i > 1 ? (
+				<span key={i}>{textArray[i]}&nbsp;</span>
+			) : null,
 		)}
 	</div>
 )
 
 function App() {
 	const [followers, setFollowers] = React.useState([])
-	const [streamTitle, setStreamTitle] = React.useState('No stream title')
+	const [streamTitle, setStreamTitle] = React.useState(
+		'No stream title',
+	)
 	const [input, setInput] = React.useState('')
-	const [isEditorOpen, setEditorOpen] = React.useState(false)
+	const [isEditorOpen, setEditorOpen] = React.useState(
+		false,
+	)
 	const [textArray, setTextArray] = React.useState([])
 
 	function useInterval(callback, delay) {
@@ -152,7 +89,9 @@ function App() {
 		const date = new Date()
 		// US NC RA 20 03 09 13 00
 		let year = date.getFullYear() % 2000
-		let month = (date.getMonth() + 1).toString().padStart(2, '0')
+		let month = (date.getMonth() + 1)
+			.toString()
+			.padStart(2, '0')
 		let day = date.getDate().toString().padStart(2, '0')
 		return [
 			'🕒',
@@ -178,9 +117,13 @@ function App() {
 		console.log('called App useEffect')
 
 		socket.on('follows', (data) => {
-			setFollowers(data.map((datum) => datum._data.from_name))
+			setFollowers(
+				data.map((datum) => datum._data.from_name),
+			)
 		})
-		socket.on('streamTitleChange', (data) => setStreamTitle(data))
+		socket.on('streamTitleChange', (data) =>
+			setStreamTitle(data),
+		)
 
 		return () => socket.off('')
 	}, [followers, streamTitle])
@@ -197,12 +140,20 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Doing Now:', textEntries['doing now']],
+			textArray: [
+				'🕒',
+				'Doing Now:',
+				textEntries['doing now'],
+			],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Then Later:', textEntries['then later']],
+			textArray: [
+				'🕒',
+				'Then Later:',
+				textEntries['then later'],
+			],
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
@@ -212,7 +163,11 @@ function App() {
 			isFullyColored: false,
 		},
 	 */ {
-			textArray: ['📢', 'Announcement:', textEntries['announcement1']],
+			textArray: [
+				'📢',
+				'Announcement:',
+				textEntries['announcement1'],
+			],
 			color: 'red',
 			isFullyColored: false,
 		},
@@ -222,7 +177,10 @@ function App() {
 			isFullyColored: true,
 		},
 		{
-			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers 💜 Thank You! 💜'],
+			textArray: [
+				'🙋🏼‍♀️',
+				followers.length + '/50 followers 💜 Thank You! 💜',
+			],
 			color: 'rgb(150, 150, 255)',
 			isFullyColored: true,
 		},
@@ -235,7 +193,11 @@ function App() {
 			isFullyColored: true,
 		},
 		{
-			textArray: ['📢', 'Announcement:', textEntries['announcement2']],
+			textArray: [
+				'📢',
+				'Announcement:',
+				textEntries['announcement2'],
+			],
 			color: 'red',
 			isFullyColored: false,
 		},
@@ -247,7 +209,11 @@ function App() {
 
 	const bottomTickerItems = [
 		{
-			textArray: [' ♥ ', 'Latest Followers', ...bottomTextFollowers],
+			textArray: [
+				' ♥ ',
+				'Latest Followers',
+				...bottomTextFollowers,
+			],
 			color: 'violet',
 			isFullyColored: false,
 		},
@@ -306,39 +272,18 @@ function App() {
 					<BottomTickerItems />
 				</div>
 			</div>
-			{/* 			<div className='bottom-text'>
-				{bottomTextItems.map((props, i) => (
-					<TickerItem key={i} {...props} />
-				))}
-			</div>
-			<MusicTicker />
-			<div className='ticker-wrap-current-status'>
-				<div className='ticker-current-status'>
-					{[0, 1, 2].map((i) => (
-						<TickerItem
-							key={i}
-							textArray={[
-								'👩🏼 ',
-								' Current Status ',
-								' 🤔 ',
-								textEntries['current status'],
-							]}
-							color='#ff5090'
-							isFullyColored={false}
-							className='current-status'
-						/>
-					))}
-				</div>
-			</div>
- */}{' '}
 			<button
 				onClick={() => setEditorOpen(!isEditorOpen)}
-				className='editor-button'>
+				className='editor-button'
+			>
 				Edit
 			</button>
 			<div
-				style={{ visibility: isEditorOpen ? 'visible' : 'hidden' }}
-				className='editor'>
+				style={{
+					visibility: isEditorOpen ? 'visible' : 'hidden',
+				}}
+				className='editor'
+			>
 				<form>
 					<input
 						className='ticker-text-input'
@@ -346,6 +291,9 @@ function App() {
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 					/>
+					<a href='http://localhost:7781/login'>
+						Log in to Spotify
+					</a>
 				</form>
 			</div>
 		</div>
