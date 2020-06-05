@@ -5,6 +5,7 @@ const path = require('path')
 const cors = require('cors')
 const querystring = require('querystring')
 const cookieParser = require('cookie-parser')
+const request = require('request')
 
 const TwitchClient = require('twitch').default
 const HelixFollow = require('twitch').HelixFollow
@@ -107,9 +108,9 @@ socket.on('connection', async (clientSocket) => {
 	})
 })
 
-/*app.get('/', (req, res) => {
+app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})*/
+})
 
 app.get('/login', (req, res) => {
 	let state = 'random string'
@@ -125,6 +126,73 @@ app.get('/login', (req, res) => {
 				state: state,
 			}),
 	)
+})
+
+app.get('/callback', (req, res) => {
+	const code = req.query.code || null
+	const state = req.query.state || null
+	const storedState = req.cookies
+		? req.cookies['spotify_auth_state']
+		: null
+
+	if (state === null || state !== storedState) {
+		res.redirect(
+			'/#' +
+				querystring.stringify({ error: 'state_mismatch' }),
+		)
+	} else {
+		res.clearCookie('spotify_auth_state')
+		const authOptions = {
+			url: 'https://accounts.spotify.com/api/token',
+			form: {
+				code,
+				redirect_uri: redirectURI,
+				grant_type: 'authorization_code',
+			},
+			headers: {
+				Authorization:
+					'Basic ' +
+					new Buffer(
+						spotifyClientId + ':' + clientSecret,
+					).toString('base64'),
+			},
+			json: true,
+		}
+
+		request.post(authOptions, (err, response, body) => {
+			if (!err && response.statusCode === 200) {
+				const access_token = body.access_token
+				const refresh_token = body.refresh_token
+				const options = {
+					url:
+						'https://api.spotify.com/v1/me/player/currently-playing',
+					headers: {
+						Authorization: 'Bearer ' + access_token,
+					},
+					json: true,
+				}
+
+				request.get(options, (error, response, body) => {
+					console.log(body)
+				})
+
+				res.redirect(
+					'/#' +
+						querystring.stringify({
+							access_token,
+							refresh_token,
+						}),
+				)
+			} else {
+				res.redirect(
+					'/#' +
+						querystring.stringify({
+							error: 'invalid_token',
+						}),
+				)
+			}
+		})
+	}
 })
 
 server.listen(7781, () => console.log('listening on 7781'))
