@@ -114,8 +114,8 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
 	let state = 'random string'
-	res.cookie('spotifyi_auth_state', state)
-
+	res.cookie('spotify_auth_state', state)
+	console.log(redirectURI)
 	res.redirect(
 		'https://accounts.spotify.com/authorize?' +
 			querystring.stringify({
@@ -141,6 +141,7 @@ app.get('/callback', (req, res) => {
 				querystring.stringify({ error: 'state_mismatch' }),
 		)
 	} else {
+		console.log(redirectURI)
 		res.clearCookie('spotify_auth_state')
 		const authOptions = {
 			url: 'https://accounts.spotify.com/api/token',
