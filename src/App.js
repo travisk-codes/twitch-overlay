@@ -10,17 +10,35 @@ import './App.css'
 const textEntries = {
 	'doing now': config.doingNow,
 	'then later': config.doingLater,
-	announcement1:
-		'Pull down with your diaphram, not up with your chest',
-	announcement2:
-		"If you think you might be dehydrated, you're dehydrated",
-	'avg followers': '3.4',
+	announcement1: 'Pull down with your diaphram, not up with your chest',
+	announcement2: "If you think you might be dehydrated, you're dehydrated",
+	'avg followers': '3.1',
 	'current status': config.currentStatus,
 }
 
-const socket = socketIOClient(
-	'https://overlayserver.travisk.info',
+const TopTickerItems = ({ topTickerItems }) => (
+	<>
+		{/* 			<TimeTextArray />
+		 */}{' '}
+		{topTickerItems.map((props, i) => (
+			<span key={i}>
+				<TickerItem {...props} />
+			</span>
+		))}
+	</>
 )
+
+const BottomTickerItems = ({ bottomTickerItems }) => (
+	<>
+		{bottomTickerItems.map((props, i) => (
+			<span key={i}>
+				<TickerItem {...props} />
+			</span>
+		))}
+	</>
+)
+
+const socket = socketIOClient('https://overlayserver.travisk.info')
 
 const Emoji = ({ emoji }) => (
 	<span role='img' aria-label='emoji'>
@@ -48,7 +66,9 @@ export const TickerItem = ({
 		&nbsp;
 		{textArray.map((_, i) =>
 			i > 1 ? (
-				<span key={i}>{textArray[i]}&nbsp;</span>
+				<span className='ticker-item' data-content={textArray[i]} key={i}>
+					{textArray[i]}&nbsp;
+				</span>
 			) : null,
 		)}
 	</div>
@@ -56,14 +76,93 @@ export const TickerItem = ({
 
 function App() {
 	const [followers, setFollowers] = React.useState([])
-	const [streamTitle, setStreamTitle] = React.useState(
-		'No stream title',
-	)
+	const [streamTitle, setStreamTitle] = React.useState('No stream title')
 	const [input, setInput] = React.useState('')
-	const [isEditorOpen, setEditorOpen] = React.useState(
-		false,
-	)
+	const [isEditorOpen, setEditorOpen] = React.useState(false)
 	const [textArray, setTextArray] = React.useState([])
+
+	const topTickerItems = [
+		{
+			textArray: [''].concat(textArray),
+			color: 'lightskyblue',
+			isFullyColored: true,
+		},
+		{
+			textArray: ['', '', streamTitle],
+			color: 'purple',
+			isFullyColored: false,
+		},
+		{
+			textArray: ['🕒', 'Doing Now:', textEntries['doing now']],
+			color: 'lightskyblue',
+			isFullyColored: false,
+		},
+		{
+			textArray: ['🕒', 'Then Later:', textEntries['then later']],
+			color: 'lightskyblue',
+			isFullyColored: false,
+		},
+		/*  {
+			textArray: ['🕒', '2100 EST', 'playing CSGO, Trackmania'],
+			color: 'rgb(64, 64, 255)',
+			isFullyColored: false,
+		},
+	 */ {
+			textArray: ['📢', 'Announcement:', textEntries['announcement1']],
+			color: 'red',
+			isFullyColored: false,
+		},
+		{
+			textArray: ['🎉', 'AFFILIATE GET!'],
+			color: 'rgb(150, 255, 150)',
+			isFullyColored: true,
+		},
+		{
+			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers 💜 Thank You! 💜'],
+			color: 'rgb(150, 150, 255)',
+			isFullyColored: true,
+		},
+		{
+			textArray: [
+				'👀',
+				`${textEntries['avg followers']}/3 average viewers 🧡 Thank You! 🧡`,
+			],
+			color: 'rgb(255, 150, 150)',
+			isFullyColored: true,
+		},
+		{
+			textArray: ['📢', 'Announcement:', textEntries['announcement2']],
+			color: 'red',
+			isFullyColored: false,
+		},
+	]
+
+	const bottomTextFollowers = followers
+		.filter((text, i) => i < 3)
+		.map((follower, i) => [' ♥   ', ' ' + follower])
+
+	const bottomTickerItems = [
+		{
+			textArray: [' 💜 ', 'Latest Followers', ...bottomTextFollowers],
+			color: 'violet',
+			isFullyColored: false,
+		},
+		{
+			textArray: MusicTicker(),
+			color: 'white',
+			isFullyColored: false,
+		},
+		{
+			textArray: [
+				'👩🏼 ',
+				' Current Status ',
+				' 🤔 ',
+				textEntries['current status'],
+			],
+			color: '#ff5090',
+			isFullyColored: false,
+		},
+	]
 
 	function useInterval(callback, delay) {
 		const savedCallback = React.useRef()
@@ -89,9 +188,7 @@ function App() {
 		const date = new Date()
 		// US NC RA 20 03 09 13 00
 		let year = date.getFullYear() % 2000
-		let month = (date.getMonth() + 1)
-			.toString()
-			.padStart(2, '0')
+		let month = (date.getMonth() + 1).toString().padStart(2, '0')
 		let day = date.getDate().toString().padStart(2, '0')
 		return [
 			'🕒',
@@ -114,162 +211,28 @@ function App() {
 	}, 1000)
 
 	React.useEffect(() => {
-		console.log('called App useEffect')
-
 		socket.on('follows', (data) => {
-			setFollowers(
-				data.map((datum) => datum._data.from_name),
-			)
+			setFollowers(data.map((datum) => datum._data.from_name))
 		})
-		socket.on('streamTitleChange', (data) =>
-			setStreamTitle(data),
-		)
+		socket.on('streamTitleChange', (data) => setStreamTitle(data))
 
 		return () => socket.off('')
 	}, [followers, streamTitle])
-
-	const topTickerItems = [
-		{
-			textArray,
-			color: 'lightskyblue',
-			isFullyColored: true,
-		},
-		{
-			textArray: ['', '', streamTitle],
-			color: 'purple',
-			isFullyColored: false,
-		},
-		{
-			textArray: [
-				'🕒',
-				'Doing Now:',
-				textEntries['doing now'],
-			],
-			color: 'lightskyblue',
-			isFullyColored: false,
-		},
-		{
-			textArray: [
-				'🕒',
-				'Then Later:',
-				textEntries['then later'],
-			],
-			color: 'lightskyblue',
-			isFullyColored: false,
-		},
-		/*  {
-			textArray: ['🕒', '2100 EST', 'playing CSGO, Trackmania'],
-			color: 'rgb(64, 64, 255)',
-			isFullyColored: false,
-		},
-	 */ {
-			textArray: [
-				'📢',
-				'Announcement:',
-				textEntries['announcement1'],
-			],
-			color: 'red',
-			isFullyColored: false,
-		},
-		{
-			textArray: ['🎉', 'AFFILIATE GET!'],
-			color: 'rgb(150, 255, 150)',
-			isFullyColored: true,
-		},
-		{
-			textArray: [
-				'🙋🏼‍♀️',
-				followers.length + '/50 followers 💜 Thank You! 💜',
-			],
-			color: 'rgb(150, 150, 255)',
-			isFullyColored: true,
-		},
-		{
-			textArray: [
-				'👀',
-				`${textEntries['avg followers']}/3 average viewers 🧡 Thank You! 🧡`,
-			],
-			color: 'rgb(255, 150, 150)',
-			isFullyColored: true,
-		},
-		{
-			textArray: [
-				'📢',
-				'Announcement:',
-				textEntries['announcement2'],
-			],
-			color: 'red',
-			isFullyColored: false,
-		},
-	]
-
-	const bottomTextFollowers = followers
-		.filter((text, i) => i < 3)
-		.map((follower, i) => [' ♥   ', ' ' + follower])
-
-	const bottomTickerItems = [
-		{
-			textArray: [
-				' ♥ ',
-				'Latest Followers',
-				...bottomTextFollowers,
-			],
-			color: 'violet',
-			isFullyColored: false,
-		},
-		{
-			textArray: MusicTicker(),
-			color: 'white',
-			isFullyColored: false,
-		},
-		{
-			textArray: [
-				'👩🏼 ',
-				' Current Status ',
-				' 🤔 ',
-				textEntries['current status'],
-			],
-			color: '#ff5090',
-			isFullyColored: false,
-		},
-	]
-
-	const TopTickerItems = () => (
-		<>
-			{/* 			<TimeTextArray />
-			 */}{' '}
-			{topTickerItems.map((props, i) => (
-				<span key={i}>
-					<TickerItem {...props} />
-				</span>
-			))}
-		</>
-	)
-
-	const BottomTickerItems = () => (
-		<>
-			{bottomTickerItems.map((props, i) => (
-				<span key={i}>
-					<TickerItem {...props} />
-				</span>
-			))}
-		</>
-	)
 
 	return (
 		<div className='App'>
 			<div className='ticker-wrap'>
 				<div className='ticker'>
-					<TopTickerItems />
-					<TopTickerItems />
+					<TopTickerItems topTickerItems={topTickerItems} />
+					<TopTickerItems topTickerItems={topTickerItems} />
 				</div>
 			</div>
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
-					<BottomTickerItems />
-					<BottomTickerItems />
-					<BottomTickerItems />
-					<BottomTickerItems />
+					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
+					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
+					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
+					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
 				</div>
 			</div>
 			<button
@@ -291,7 +254,7 @@ function App() {
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 					/>
-					<a href='http://localhost:7781/login'>
+					<a href='https://overlayserver.travisk.info/login'>
 						Log in to Spotify
 					</a>
 				</form>

@@ -66,6 +66,7 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 ✍️ Editing Voice-to-Text Transcripts
 ✔️ React-Testing-Library and Async 
 🖼️ Twitch Stream Overlay 
+🎵 Spotify API in Stream Overlay
 
 📢 feat. Party Parrot 🦜 & Blobcat 🐈
 📢 feat. Far Out Parrot 🦜 & Blobcat 🐈

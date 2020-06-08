@@ -12,8 +12,6 @@ const HelixFollow = require('twitch').HelixFollow
 const HelixStream = require('twitch').HelixStream
 const WebHookListener = require('twitch-webhooks').default
 
-const spotifyWebApi = require('spotify-web-api-node')
-
 const { userId, clientId, secret } = require('./config')
 const {
 	spotifyClientId,
@@ -23,11 +21,8 @@ const {
 
 const app = express()
 const server = http.createServer(app)
-const socket = io(server, { origins: '*:*' })
-const twitchClient = TwitchClient.withClientCredentials(
-	clientId,
-	secret,
-)
+const socket = io(server, { origins: '*:*', cookie: false })
+const twitchClient = TwitchClient.withClientCredentials(clientId, secret)
 
 app.use(express.static(path.join(__dirname, 'build')))
 app.use(cors())
@@ -40,10 +35,7 @@ const webhookConfig = {
 }
 
 async function getWebhookSubscriptions() {
-	const listener = await WebHookListener.create(
-		twitchClient,
-		webhookConfig,
-	)
+	const listener = await WebHookListener.create(twitchClient, webhookConfig)
 	listener.listen()
 	const streamChangeSubscription = await listener.subscribeToStreamChanges(
 		userId,
@@ -79,20 +71,14 @@ const onNewFollow = (follow = HelixFollow) => {
 }
 
 socket.on('connection', async (clientSocket) => {
-	console.log(
-		'webclientSocket connection established with client',
-	)
-	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated(
-		{
-			followedUser: userId,
-		},
-	)
+	console.log('webclientSocket connection established with client')
+	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
+		followedUser: userId,
+	})
 	follows = await paginatedFollows.getAll()
 	clientSocket.emit('follows', follows)
 
-	const stream = await twitchClient.helix.streams.getStreamByUserId(
-		userId,
-	)
+	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
 	if (stream) {
 		clientSocket.emit('streamTitleChange', stream.title)
 	}
@@ -100,8 +86,8 @@ socket.on('connection', async (clientSocket) => {
 	clientSocket.on('disconnect', async () => {
 		try {
 			console.log('disconnected')
-			subscriptions[0].stop()
-			subscriptions[1].stop()
+			//subscriptions[0].stop()
+			//subscriptions[1].stop()
 		} catch (e) {
 			console.log(e)
 		}
@@ -131,15 +117,10 @@ app.get('/login', (req, res) => {
 app.get('/callback', (req, res) => {
 	const code = req.query.code || null
 	const state = req.query.state || null
-	const storedState = req.cookies
-		? req.cookies['spotify_auth_state']
-		: null
+	const storedState = req.cookies ? req.cookies['spotify_auth_state'] : null
 
 	if (state === null || state !== storedState) {
-		res.redirect(
-			'/#' +
-				querystring.stringify({ error: 'state_mismatch' }),
-		)
+		res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }))
 	} else {
 		console.log(redirectURI)
 		res.clearCookie('spotify_auth_state')
@@ -153,9 +134,7 @@ app.get('/callback', (req, res) => {
 			headers: {
 				Authorization:
 					'Basic ' +
-					new Buffer(
-						spotifyClientId + ':' + clientSecret,
-					).toString('base64'),
+					new Buffer(spotifyClientId + ':' + clientSecret).toString('base64'),
 			},
 			json: true,
 		}
@@ -165,16 +144,16 @@ app.get('/callback', (req, res) => {
 				const access_token = body.access_token
 				const refresh_token = body.refresh_token
 				const options = {
-					url:
-						'https://api.spotify.com/v1/me/player/currently-playing',
+					url: 'https://api.spotify.com/v1/me/player/currently-playing',
 					headers: {
 						Authorization: 'Bearer ' + access_token,
 					},
 					json: true,
 				}
-
+				let songTitle
 				request.get(options, (error, response, body) => {
-					console.log(body)
+					console.log(body.item.name)
+					songTitle = body.item.name
 				})
 
 				res.redirect(
@@ -182,6 +161,7 @@ app.get('/callback', (req, res) => {
 						querystring.stringify({
 							access_token,
 							refresh_token,
+							song_title: songTitle,
 						}),
 				)
 			} else {
@@ -194,6 +174,32 @@ app.get('/callback', (req, res) => {
 			}
 		})
 	}
+})
+
+app.get('/refresh_token', (req, res) => {
+	const refreshToken = req.query.refresh_token
+	console.log(refreshToken)
+	const authOptions = {
+		url: 'https://accounts.spotify.com/api/token',
+		headers: {
+			Authorization:
+				'Basic ' +
+				new Buffer(spotifyClientId + ':' + clientSecret).toString('base64'),
+		},
+		form: {
+			grant_type: 'refresh_token',
+			refresh_token: refreshToken,
+		},
+		json: true,
+	}
+	request.post(authOptions, (err, resp, body) => {
+		if (!err && resp.statusCode === 200) {
+			const accessToken = body.access_token
+			res.send({
+				access_token: accessToken,
+			})
+		}
+	})
 })
 
 server.listen(7781, () => console.log('listening on 7781'))

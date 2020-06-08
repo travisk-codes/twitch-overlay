@@ -18,21 +18,21 @@
 
 @keyframes ticker-reverse {
 	0% {
-		transform: translate3d(-50%, 0, 0);
+		transform: translateX(-50%);
 		visibility: visible;
 	}
 	100% {
-		transform: translate3d(0, 0, 0);
+		transform: translateX(0);
 	}
 }
 
 @keyframes three-ticker {
 	0% {
-		transform: translate3d(0, 0, 0);
+		transform: translateX(0);
 		visibility: visible;
 	}
 	100% {
-		transform: translate3d(-33.3%, 0, 0);
+		transform: translateX(-33.3%);
 	}
 }
 
@@ -109,6 +109,7 @@
 
 .ticker__item {
 	display: inline-block;
+	position: relative;
 	padding: 0 30px;
 }
 
@@ -160,27 +161,30 @@
 	padding: 0 4px;
 }
 
-.bottom-text {
-	position: fixed;
-	bottom: 10px;
-	white-space: nowrap;
-	left: 300px;
-	overflow: hidden;
-	right: 1370px;
-	mask-image: linear-gradient(to right, rgb(0, 0, 0) 95%, rgba(0, 0, 0, 0));
-}
-
-.bottom-text .ticker__item {
+.ticker__item {
 	padding: 0 6px;
+	position: relative;
 }
 
 .text {
 	color: hsl(0, 0%, 100%);
 	font-size: 16px;
-	text-shadow: 0px 4px 10px black, 1px 1px black; /*, -2px 0px black, 0px 2px black, 0px -2px black,
-		2px 2px black, -2px -2px black, -2px 2px black, 2px -2px black;*/
 }
 
+.ticker-item {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+.ticker-item:after {
+	content: attr(data-content);
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	z-index: -999;
+	color: black;
+}
 
 .editor {
 	position: fixed;

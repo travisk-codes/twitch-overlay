@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-import config from './config'
+import queryString from 'query-string'
 
 const MusicTicker = () => {
 	const [currentMusic, setCurrentMusic] = useState({
@@ -8,33 +7,39 @@ const MusicTicker = () => {
 		artist: '',
 		album: '',
 	})
-	const [accessToken, setAccessToken] = useState(
-		config.spotifyAuth
-	)
+	const [accessToken, setAccessToken] = useState(null)
+	const [refreshToken, setRefreshToken] = useState(null)
+
+	const fetchCurrentMusic = async () => {
+		const requestOptions = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + accessToken,
+			},
+		}
+		try {
+			const response = await fetch(
+				'https://api.spotify.com/v1/me/player/currently-playing',
+				requestOptions,
+			)
+			const json = await response.json()
+			const { name, album } = json.item
+			setCurrentMusic({
+				song: name,
+				artist: album.artists[0].name,
+				album: album.name,
+			})
+		} catch (e) {
+			console.warn(e.name + ': ' + e.message)
+		}
+	}
 
 	useEffect(() => {
-		const fetchAccessAuthorizationFromUser = async () => {}
-		const fetchAccessAndRefreshTokens = async (code) => {
-			try {
-				const response = await fetch(
-					'https://travisk.info/current-music/login',
-					{
-						headers: {
-							'Access-Control-Allow-Origin': '*',
-						},
-					},
-				)
-				const json = await response.json()
-				return json
-			} catch (e) {
-				console.log('could not fetch access token')
-				console.error(e.name + ': ' + e.message)
-				return 'fetchAccessToken error'
-			}
-		}
-		const accessResponse = fetchAccessAndRefreshTokens()
-		console.log(accessResponse)
-		//const tokenResponse = fetchAccessAndRefreshTokens(accessResponse)
+		const access = queryString.parse(window.location.hash).access_token
+		const refresh = queryString.parse(window.location.hash).refresh_token
+		setAccessToken(access)
+		setRefreshToken(refresh)
 	}, [])
 
 	const useInterval = (callback, delay) => {
@@ -57,57 +62,21 @@ const MusicTicker = () => {
 		}, [delay])
 	}
 
-	const fetchAccessAndRefreshTokens = async (code) => {
-		const requestOptions = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Authorization:
-					'Basic NmI5ZThlOGI5OTdkNDUyOThlMDAyM2RjNjIyNTUyMmE6M2UxYThkY2FlZWUyNGMzMThhNzk3NDc4NTNjZjBhNDc=',
-			},
-			body: `grant_type=authorization_code&code=${code}&redirect_uri=http://localhost:3000`,
-		}
+	const fetchNewAccessToken = async () => {
 		try {
-			const response = await fetch(
-				'https://accounts.spotify.com/api/token',
-				requestOptions,
+			const resp = await fetch(
+				'https://overlayserver.travisk.info/refresh_token?refresh_token=' +
+					refreshToken,
 			)
-			const json = await response.json()
-			return json.access_token
+			const json = await resp.json()
+			setAccessToken(json.access_token)
 		} catch (e) {
-			console.log('could not fetch access token')
-			console.error(e.name + ': ' + e.message)
-			return 'fetchAccessToken error'
-		}
-	}
-
-	const fetchCurrentMusic = async () => {
-		const requestOptions = {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + accessToken,
-			},
-		}
-		try {
-			const response = await fetch(
-				'https://api.spotify.com/v1/me/player',
-				requestOptions,
-			)
-			const json = await response.json()
-			const { name, album } = json.item
-			setCurrentMusic({
-				song: name,
-				artist: album.artists[0].name,
-				album: album.name,
-			})
-		} catch (e) {
-			console.warn(e.name + ': ' + e.message)
-			setAccessToken(await fetchAccessAndRefreshTokens())
+			console.log(e.name, e.message)
 		}
 	}
 
 	useInterval(fetchCurrentMusic, 5000)
+	useInterval(fetchNewAccessToken, 1000 * 60 * 59)
 
 	const { song, artist, album } = currentMusic
 

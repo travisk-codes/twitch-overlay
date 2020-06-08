@@ -1,0 +1,5 @@
+#!/bin/bash
+
+while inotifywait -r -e modify,create,delete,move .; do
+	rsync -avz --exclude "node_modules" . tdk@travisk.info:/home/tdk/twitch-overlay
+done
