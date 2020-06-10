@@ -7,15 +7,6 @@ import config from './config'
 
 import './App.css'
 
-const textEntries = {
-	'doing now': config.doingNow,
-	'then later': config.doingLater,
-	announcement1: 'Pull down with your diaphram, not up with your chest',
-	announcement2: "If you think you might be dehydrated, you're dehydrated",
-	'avg followers': '3.1',
-	'current status': config.currentStatus,
-}
-
 const TopTickerItems = ({ topTickerItems }) => (
 	<>
 		{/* 			<TimeTextArray />
@@ -77,9 +68,25 @@ export const TickerItem = ({
 function App() {
 	const [followers, setFollowers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
-	const [input, setInput] = React.useState('')
-	const [isEditorOpen, setEditorOpen] = React.useState(false)
+	const [doingNow, setDoingNow] = React.useState('')
+	const [doingLater, setDoingLater] = React.useState('')
+	const [currentStatus, setCurrentStatus] = React.useState({
+		mood: 3,
+		anxiety: 3,
+		mental: 3,
+		physical: 3,
+	})
+	const [isEditorOpen, setEditorOpen] = React.useState(true)
 	const [textArray, setTextArray] = React.useState([])
+
+	const textEntries = {
+		'doing now': doingNow,
+		'then later': doingLater,
+		announcement1: 'Pull down with your diaphram, not up with your chest',
+		announcement2: "If you think you might be dehydrated, you're dehydrated",
+		'avg followers': '3.1',
+		'current status': `Mood: ${currentStatus.mood}/6, Anxiety: ${currentStatus.anxiety}/6, Energy (Mental): ${currentStatus.mental}/6, Energy (Physical): ${currentStatus.physical}/6 `,
+	}
 
 	const topTickerItems = [
 		{
@@ -248,15 +255,90 @@ function App() {
 				className='editor'
 			>
 				<form>
-					<input
-						className='ticker-text-input'
-						placeholder='yay'
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-					/>
-					<a href='https://overlayserver.travisk.info/login'>
-						Log in to Spotify
-					</a>
+					<label>
+						{'Doing Now: '}
+						<input
+							className='ticker-text-input'
+							value={doingNow}
+							onChange={(e) => setDoingNow(e.target.value)}
+						/>
+					</label>
+					<br />
+					<label>
+						{'Doing Later: '}
+						<input
+							className='ticker-text-input'
+							value={doingLater}
+							onChange={(e) => setDoingLater(e.target.value)}
+						/>
+					</label>
+					<br />
+					<label>
+						{' Mood: '}
+						<input
+							size='1'
+							type='number'
+							className='ticker-text-input'
+							value={currentStatus.mood}
+							onChange={(e) =>
+								setCurrentStatus({
+									...currentStatus,
+									mood: e.target.value,
+								})
+							}
+						/>
+					</label>
+					<label>
+						{' Anxiety: '}
+						<input
+							size='1'
+							type='number'
+							className='ticker-text-input'
+							value={currentStatus.anxiety}
+							onChange={(e) =>
+								setCurrentStatus({
+									...currentStatus,
+									anxiety: e.target.value,
+								})
+							}
+						/>
+					</label>
+					<label>
+						{' Energy (Mental): '}
+						<input
+							size='1'
+							type='number'
+							className='ticker-text-input'
+							value={currentStatus.mental}
+							onChange={(e) =>
+								setCurrentStatus({
+									...currentStatus,
+									mental: e.target.value,
+								})
+							}
+						/>
+					</label>
+					<label>
+						{' Energy (Physical): '}
+						<input
+							size='1'
+							type='number'
+							className='ticker-text-input'
+							value={currentStatus.physical}
+							onChange={(e) =>
+								setCurrentStatus({
+									...currentStatus,
+									physical: e.target.value,
+								})
+							}
+						/>
+					</label>
+
+					<div>
+						<a href='https://overlayserver.travisk.info/login'>
+							{'Log in to Spotify'}
+						</a>
+					</div>
 				</form>
 			</div>
 		</div>
