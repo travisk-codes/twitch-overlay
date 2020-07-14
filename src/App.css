@@ -110,7 +110,6 @@
 .ticker__item {
 	display: inline-block;
 	position: relative;
-	padding: 0 30px;
 }
 
 .ticker-music div {
@@ -161,14 +160,10 @@
 	padding: 0 4px;
 }
 
-.ticker__item {
-	padding: 0 6px;
-	position: relative;
-}
-
 .text {
 	color: hsl(0, 0%, 100%);
 	font-size: 16px;
+	padding: 0 30px;
 }
 
 .ticker-item {

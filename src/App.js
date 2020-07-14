@@ -2,68 +2,11 @@ import React from 'react'
 import socketIOClient from 'socket.io-client'
 
 import MusicTicker from './MusicTicker'
-
-import config from './config'
+import TickerItems from './Tickers'
 
 import './App.css'
 
-const TopTickerItems = ({ topTickerItems }) => (
-	<>
-		{/* 			<TimeTextArray />
-		 */}{' '}
-		{topTickerItems.map((props, i) => (
-			<span key={i}>
-				<TickerItem {...props} />
-			</span>
-		))}
-	</>
-)
-
-const BottomTickerItems = ({ bottomTickerItems }) => (
-	<>
-		{bottomTickerItems.map((props, i) => (
-			<span key={i}>
-				<TickerItem {...props} />
-			</span>
-		))}
-	</>
-)
-
 const socket = socketIOClient('https://overlayserver.travisk.info')
-
-const Emoji = ({ emoji }) => (
-	<span role='img' aria-label='emoji'>
-		{emoji}
-	</span>
-)
-
-export const TickerItem = ({
-	textArray,
-	color,
-	isFullyColored,
-	className,
-	noSpacing,
-}) => (
-	<div
-		className={`ticker__item text ${className}`}
-		style={{
-			color: isFullyColored ? color : null,
-			padding: noSpacing ? '0 10px' : '0 30px',
-		}}
-	>
-		<Emoji emoji={textArray[0]} />
-		&nbsp;
-		<span style={{ color }}>{textArray[1]}</span>
-		&nbsp;
-		{textArray.map((_, i) =>
-			i > 1 ? (
-				<span className='ticker-item' data-content={textArray[i]} key={i}>
-					{textArray[i]}&nbsp;
-				</span>
-			) : null,
-		)}
-	</div>
-)
 
 function App() {
 	const [followers, setFollowers] = React.useState([])
@@ -109,12 +52,7 @@ function App() {
 			color: 'lightskyblue',
 			isFullyColored: false,
 		},
-		/*  {
-			textArray: ['🕒', '2100 EST', 'playing CSGO, Trackmania'],
-			color: 'rgb(64, 64, 255)',
-			isFullyColored: false,
-		},
-	 */ {
+		{
 			textArray: ['📢', 'Announcement:', textEntries['announcement1']],
 			color: 'red',
 			isFullyColored: false,
@@ -230,16 +168,16 @@ function App() {
 		<div className='App'>
 			<div className='ticker-wrap'>
 				<div className='ticker'>
-					<TopTickerItems topTickerItems={topTickerItems} />
-					<TopTickerItems topTickerItems={topTickerItems} />
+					<TickerItems items={topTickerItems} />
+					<TickerItems items={topTickerItems} />
 				</div>
 			</div>
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
-					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
-					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
-					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
-					<BottomTickerItems bottomTickerItems={bottomTickerItems} />
+					<TickerItems items={bottomTickerItems} />
+					<TickerItems items={bottomTickerItems} />
+					<TickerItems items={bottomTickerItems} />
+					<TickerItems items={bottomTickerItems} />
 				</div>
 			</div>
 			<button
