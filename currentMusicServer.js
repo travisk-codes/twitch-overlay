@@ -1,172 +1,123 @@
-var express = require('express') // Express web server framework
-var request = require('request') // "Request" library
-var cors = require('cors')
-var querystring = require('querystring')
-var cookieParser = require('cookie-parser')
-var spotifySecrets = require('./spotifySecrets')
+import express, { static } from 'express' // Express web server framework
+import { post, get } from 'request' // "Request" library
+import cors from 'cors'
+import { stringify } from 'querystring'
+import cookieParser from 'cookie-parser'
+import { clientId, clientSecret, redirectURI } from './spotifySecrets'
 
-var client_id = spotifySecrets.spotifyClientId
-var client_secret = spotifySecrets.clientSecret
-var redirect_uri = spotifySecrets.redirectURI
-
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-var generateRandomString = function (length) {
-	var text = ''
-	var possible =
+const generateRandomString = (length) => {
+	let text = ''
+	let possible =
 		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-	for (var i = 0; i < length; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length))
+	for (let i = 0; i < length; i++) {
+		let randomIndex = Math.floor(Math.random() * possible.length)
+		text += possible.charAt(randomIndex)
 	}
+
 	return text
 }
 
-var stateKey = 'spotify_auth_state'
+const stateKey = 'spotify_auth_state'
 
-var app = express()
+const app = express()
 
 app
-	.use(express.static(__dirname + '/public'))
+	.use(static(__dirname + '/public'))
 	.use(cors())
 	.use(cookieParser())
 
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
 	res.header('Access-Control-Allow-Origin', '*')
 	res.redirect('/login')
 })
 
-app.get('/login', function (req, res) {
-	var state = generateRandomString(16)
-	res.cookie(stateKey, state)
+app.get('/login', function (_, res) {
+	const state = generateRandomString(16)
+	const url = 'https://accounts.spotify.com/authorize?'
+	const queryParams = {
+		response_type: 'code',
+		client_id: clientId,
+		scope: 'user-read-playback-state',
+		redirect_uri: redirectURI,
+		state,
+	}
 
-	// your application requests authorization
-	var scope = 'user-read-playback-state'
+	res.cookie(stateKey, state)
 	res.header('Access-Control-Allow-Origin', '*')
-	res.redirect(
-		'https://accounts.spotify.com/authorize?' +
-			querystring.stringify({
-				response_type: 'code',
-				client_id: client_id,
-				scope: scope,
-				redirect_uri: redirect_uri,
-				state: state,
-			}),
-	)
+	res.redirect(url + stringify(queryParams))
 })
 
 app.get('/callback', function (req, res) {
-	// your application requests refresh and access tokens
-	// after checking the state parameter
-
-	var code = req.query.code || null
-	var state = req.query.state || null
-	var storedState = req.cookies ? req.cookies[stateKey] : null
+	const code = req.query.code || null
+	const state = req.query.state || null
+	const storedState = req.cookies ? req.cookies[stateKey] : null
 
 	if (state === null || state !== storedState) {
-		res.redirect(
-			'/#' +
-				querystring.stringify({
-					error: 'state_mismatch',
-				}),
-		)
-	} else {
-		res.clearCookie(stateKey)
-		var authOptions = {
-			url: 'https://accounts.spotify.com/api/token',
-			form: {
-				code: code,
-				redirect_uri: redirect_uri,
-				grant_type: 'authorization_code',
-			},
-			headers: {
-				'Access-Control-Allow-Origin': '*',
-				Authorization:
-					'Basic ' +
-					new Buffer(client_id + ':' + client_secret).toString('base64'),
-			},
-			json: true,
-		}
-
-		request.post(authOptions, function (error, response, body) {
-			if (!error && response.statusCode === 200) {
-				var access_token = body.access_token,
-					refresh_token = body.refresh_token
-				var options = {
-					url: 'https://api.spotify.com/v1/me/player',
-					headers: {
-						Authorization: 'Bearer ' + access_token,
-						'Access-Control-Allow-Origin': '*',
-					},
-					json: true,
-				}
-
-				// use the access token to access the Spotify Web API
-				request.get(options, function (error, response, body) {
-					res.json(body)
-					/*const { name, album } = body.item
-					res.json({
-						song: name,
-						artist: album.artists[0].name,
-						album: album.name,
- 					})
-					res.redirect(
-						'/overlay?' +
-							querystring.stringify({
-								song: name,
-								artist: album.artists[0].name,
-								album: album.name,
-							}),
-					)*/
-				})
-
-				// we can also pass the token to the browser to make requests from there
-				/* res.redirect(
-					'/overlay?' +
-						querystring.stringify({
-							access_token: access_token,
-							refresh_token: refresh_token,
-						}),
-				) */
-			} else {
-				res.redirect(
-					'/overlay?' +
-						querystring.stringify({
-							error: 'invalid_token',
-						}),
-				)
-			}
-		})
+		res.redirect('/#?error=state_mismatch')
+		return
 	}
-})
 
-app.get('/refresh_token', function (req, res) {
-	// requesting access token from refresh token
-	var refresh_token = req.query.refresh_token
-	var authOptions = {
+	res.clearCookie(stateKey)
+
+	const buffer = new Buffer(clientId + ':' + clientSecret)
+	const headers = {
+		'Access-Control-Allow-Origin': '*',
+		Authorization: 'Basic ' + buffer.toString('base64'),
+	}
+	const form = {
+		code,
+		redirect_uri: redirectURI,
+		grant_type: 'authorization_code',
+	}
+	const authOptions = {
 		url: 'https://accounts.spotify.com/api/token',
-		headers: {
-			Authorization:
-				'Basic ' +
-				new Buffer(client_id + ':' + client_secret).toString('base64'),
-		},
-		form: {
-			grant_type: 'refresh_token',
-			refresh_token: refresh_token,
-		},
+		form,
+		headers,
 		json: true,
 	}
 
-	request.post(authOptions, function (error, response, body) {
-		if (!error && response.statusCode === 200) {
-			var access_token = body.access_token
-			res.send({
-				access_token: access_token,
-			})
+	post(authOptions, (error, response, body) => {
+		if (error || response.statusCode !== 200) {
+			res.redirect('/overlay?error=invalid_token')
+			return
 		}
+
+		const headers = {
+			'Access-Control-Allow-Origin': '*',
+			Authorization: 'Bearer ' + body.access_token,
+		}
+		let options = {
+			url: 'https://api.spotify.com/v1/me/player',
+			headers,
+			json: true,
+		}
+
+		get(options, (error, response, body) => {
+			res.json(body)
+		})
+	})
+})
+
+app.get('/refresh_token', function (req, res) {
+	const buffer = new Buffer(clientId + ':' + clientSecret)
+	const headers = {
+		Authorization: 'Basic ' + buffer.toString('base64'),
+	}
+	const form = {
+		grant_type: 'refresh_token',
+		refresh_token: req.query.refresh_token,
+	}
+	let authOptions = {
+		url: 'https://accounts.spotify.com/api/token',
+		headers,
+		form,
+		json: true,
+	}
+
+	post(authOptions, function (error, response, body) {
+		if (error || response.statusCode !== 200) return
+		res.send({ access_token: body.access_token })
 	})
 })
 
