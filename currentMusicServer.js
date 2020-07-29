@@ -3,17 +3,18 @@ var request = require('request') // "Request" library
 var cors = require('cors')
 var querystring = require('querystring')
 var cookieParser = require('cookie-parser')
+var spotifySecrets = require('./spotifySecrets')
 
-var client_id = '6b9e8e8b997d45298e0023dc6225522a' // Your client id
-var client_secret = '3e1a8dcaeee24c318a79747853cf0a47' // Your secret
-var redirect_uri = 'https://travisk.info/current-music/callback' // Your redirect uri
+var client_id = spotifySecrets.spotifyClientId
+var client_secret = spotifySecrets.clientSecret
+var redirect_uri = spotifySecrets.redirectURI
 
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-var generateRandomString = function(length) {
+var generateRandomString = function (length) {
 	var text = ''
 	var possible =
 		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -38,7 +39,7 @@ app.get('/', (req, res) => {
 	res.redirect('/login')
 })
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
 	var state = generateRandomString(16)
 	res.cookie(stateKey, state)
 
@@ -57,7 +58,7 @@ app.get('/login', function(req, res) {
 	)
 })
 
-app.get('/callback', function(req, res) {
+app.get('/callback', function (req, res) {
 	// your application requests refresh and access tokens
 	// after checking the state parameter
 
@@ -90,7 +91,7 @@ app.get('/callback', function(req, res) {
 			json: true,
 		}
 
-		request.post(authOptions, function(error, response, body) {
+		request.post(authOptions, function (error, response, body) {
 			if (!error && response.statusCode === 200) {
 				var access_token = body.access_token,
 					refresh_token = body.refresh_token
@@ -104,7 +105,7 @@ app.get('/callback', function(req, res) {
 				}
 
 				// use the access token to access the Spotify Web API
-				request.get(options, function(error, response, body) {
+				request.get(options, function (error, response, body) {
 					res.json(body)
 					/*const { name, album } = body.item
 					res.json({
@@ -142,7 +143,7 @@ app.get('/callback', function(req, res) {
 	}
 })
 
-app.get('/refresh_token', function(req, res) {
+app.get('/refresh_token', function (req, res) {
 	// requesting access token from refresh token
 	var refresh_token = req.query.refresh_token
 	var authOptions = {
@@ -159,7 +160,7 @@ app.get('/refresh_token', function(req, res) {
 		json: true,
 	}
 
-	request.post(authOptions, function(error, response, body) {
+	request.post(authOptions, function (error, response, body) {
 		if (!error && response.statusCode === 200) {
 			var access_token = body.access_token
 			res.send({

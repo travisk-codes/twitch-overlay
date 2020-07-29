@@ -45,6 +45,7 @@
 	height: 100px;
 	padding-left: 0%;
 	box-sizing: content-box;
+	background-color: grey;
 }
 
 .ticker {
@@ -65,6 +66,7 @@
 	padding-top: 10px;
 	padding-left: 0%;
 	box-sizing: content-box;
+	background-color: grey;
 
 	bottom: 0px;
 	padding-bottom: 8px;

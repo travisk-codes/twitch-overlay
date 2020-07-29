@@ -82,13 +82,11 @@ function App() {
 		},
 	]
 
-	const bottomTextFollowers = followers
-		.filter((text, i) => i < 3)
-		.map((follower, i) => [' ♥   ', ' ' + follower])
+	const bottomTextFollowers = followers.filter((text, i) => i < 3).join(' ♥ ')
 
 	const bottomTickerItems = [
 		{
-			textArray: [' 💜 ', 'Latest Followers', ...bottomTextFollowers],
+			textArray: [' 💜 ', 'Latest Followers 💜 ', bottomTextFollowers],
 			color: 'violet',
 			isFullyColored: false,
 		},
