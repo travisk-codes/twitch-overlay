@@ -13,11 +13,6 @@ const HelixStream = require('twitch').HelixStream
 const WebHookListener = require('twitch-webhooks').default
 
 const { userId, clientId, secret } = require('./config')
-const {
-	spotifyClientId,
-	clientSecret,
-	redirectURI,
-} = require('./spotifySecrets')
 
 const app = express()
 const server = http.createServer(app)
@@ -90,114 +85,6 @@ socket.on('connection', async (clientSocket) => {
 			//subscriptions[1].stop()
 		} catch (e) {
 			console.log(e)
-		}
-	})
-})
-
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
-
-app.get('/login', (req, res) => {
-	let state = 'random string'
-	res.cookie('spotify_auth_state', state)
-	console.log(redirectURI)
-	res.redirect(
-		'https://accounts.spotify.com/authorize?' +
-			querystring.stringify({
-				response_type: 'code',
-				client_id: spotifyClientId,
-				scope: 'user-read-currently-playing',
-				redirect_uri: redirectURI,
-				state: state,
-			}),
-	)
-})
-
-app.get('/callback', (req, res) => {
-	const code = req.query.code || null
-	const state = req.query.state || null
-	const storedState = req.cookies ? req.cookies['spotify_auth_state'] : null
-
-	if (state === null || state !== storedState) {
-		res.redirect('/#' + querystring.stringify({ error: 'state_mismatch' }))
-	} else {
-		console.log(redirectURI)
-		res.clearCookie('spotify_auth_state')
-		const authOptions = {
-			url: 'https://accounts.spotify.com/api/token',
-			form: {
-				code,
-				redirect_uri: redirectURI,
-				grant_type: 'authorization_code',
-			},
-			headers: {
-				Authorization:
-					'Basic ' +
-					new Buffer(spotifyClientId + ':' + clientSecret).toString('base64'),
-			},
-			json: true,
-		}
-
-		request.post(authOptions, (err, response, body) => {
-			if (!err && response.statusCode === 200) {
-				const access_token = body.access_token
-				const refresh_token = body.refresh_token
-				const options = {
-					url: 'https://api.spotify.com/v1/me/player/currently-playing',
-					headers: {
-						Authorization: 'Bearer ' + access_token,
-					},
-					json: true,
-				}
-				let songTitle
-				request.get(options, (error, response, body) => {
-					console.log(body.item.name)
-					songTitle = body.item.name
-				})
-
-				res.redirect(
-					'/#' +
-						querystring.stringify({
-							access_token,
-							refresh_token,
-							song_title: songTitle,
-						}),
-				)
-			} else {
-				res.redirect(
-					'/#' +
-						querystring.stringify({
-							error: 'invalid_token',
-						}),
-				)
-			}
-		})
-	}
-})
-
-app.get('/refresh_token', (req, res) => {
-	const refreshToken = req.query.refresh_token
-	console.log(refreshToken)
-	const authOptions = {
-		url: 'https://accounts.spotify.com/api/token',
-		headers: {
-			Authorization:
-				'Basic ' +
-				new Buffer(spotifyClientId + ':' + clientSecret).toString('base64'),
-		},
-		form: {
-			grant_type: 'refresh_token',
-			refresh_token: refreshToken,
-		},
-		json: true,
-	}
-	request.post(authOptions, (err, resp, body) => {
-		if (!err && resp.statusCode === 200) {
-			const accessToken = body.access_token
-			res.send({
-				access_token: accessToken,
-			})
 		}
 	})
 })

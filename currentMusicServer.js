@@ -1,5 +1,5 @@
-import express, { static } from 'express' // Express web server framework
-import { post, get } from 'request' // "Request" library
+import express, { static as staticDir } from 'express'
+import { post, get } from 'request'
 import cors from 'cors'
 import { stringify } from 'querystring'
 import cookieParser from 'cookie-parser'
@@ -23,7 +23,7 @@ const stateKey = 'spotify_auth_state'
 const app = express()
 
 app
-	.use(static(__dirname + '/public'))
+	.use(staticDir(__dirname + '/public'))
 	.use(cors())
 	.use(cookieParser())
 
