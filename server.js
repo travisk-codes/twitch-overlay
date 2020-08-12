@@ -10,6 +10,7 @@ const request = require('request')
 const TwitchClient = require('twitch').default
 const HelixFollow = require('twitch').HelixFollow
 const HelixStream = require('twitch').HelixStream
+const HelixSubscription = require('twitch').HelixSubscription
 const WebHookListener = require('twitch-webhooks').default
 
 const { userId, clientId, secret } = require('./config')
@@ -40,9 +41,17 @@ async function getWebhookSubscriptions() {
 		userId,
 		onNewFollow,
 	)
-	return [streamChangeSubscription, followsSubscription]
+	const subscriptionsSubscription = await listener.subscribeToSubscriptionEvents(
+		userId,
+		onNewSubscription,
+	)
+	return [
+		streamChangeSubscription,
+		followsSubscription,
+		subscriptionsSubscription,
+	]
 }
-const subscriptions = getWebhookSubscriptions()
+const webhookSubscriptions = getWebhookSubscriptions()
 
 function onStreamChange(stream = HelixStream) {
 	if (stream) {
@@ -65,6 +74,20 @@ const onNewFollow = (follow = HelixFollow) => {
 	}
 }
 
+let subscriptions = []
+const onNewSubscription = (subscription = HelixSubscription) => {
+	console.log(subscription)
+	if (subscription) {
+		console.log('new subscription')
+		subscriptions.unshift(subscription)
+		socket.emit('subscriptions', subscriptions)
+	} else {
+		console.log('end subscription')
+		subscriptions.pop()
+		socket.emit('subscriptions', subscriptions)
+	}
+}
+
 socket.on('connection', async (clientSocket) => {
 	console.log('webclientSocket connection established with client')
 	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
@@ -72,6 +95,12 @@ socket.on('connection', async (clientSocket) => {
 	})
 	follows = await paginatedFollows.getAll()
 	clientSocket.emit('follows', follows)
+
+	const paginatedSubscriptions = twitchClient.helix.subscriptions.getSubscriptionsForUser(
+		userId,
+	)
+	subscriptions = await paginatedSubscriptions.getAll()
+	clientSocket.emit('subscriptions', subscriptions)
 
 	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
 	if (stream) {

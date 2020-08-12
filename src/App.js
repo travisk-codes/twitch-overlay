@@ -10,6 +10,7 @@ const socket = socketIOClient('https://overlayserver.travisk.info')
 
 function App() {
 	const [followers, setFollowers] = React.useState([])
+	const [subscribers, setSubscribers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
 	const [doingNow, setDoingNow] = React.useState('')
 	const [doingLater, setDoingLater] = React.useState('')
@@ -25,8 +26,10 @@ function App() {
 	const textEntries = {
 		'doing now': doingNow,
 		'then later': doingLater,
-		announcement1: 'Pull down with your diaphram, not up with your chest',
-		announcement2: "If you think you might be dehydrated, you're dehydrated",
+		announcement1: 'mention me @travisk_streams in chat to get my attention',
+		announcement2:
+			'please let me know if the stream is having any technical issues!',
+		announcement3: 'Looking to hire a junior dev? https://hire.travisk.info',
 		'avg followers': '3.1',
 		'current status': `Mood: ${currentStatus.mood}/6, Anxiety: ${currentStatus.anxiety}/6, Energy (Mental): ${currentStatus.mental}/6, Energy (Physical): ${currentStatus.physical}/6 `,
 	}
@@ -158,9 +161,9 @@ function App() {
 			setFollowers(data.map((datum) => datum._data.from_name))
 		})
 		socket.on('streamTitleChange', (data) => setStreamTitle(data))
-
+		socket.on('subscriptions', (data) => console.log(data))
 		return () => socket.off('')
-	}, [followers, streamTitle])
+	}, [followers, streamTitle, subscribers])
 
 	return (
 		<div className='App'>
