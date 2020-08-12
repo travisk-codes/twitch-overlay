@@ -100,7 +100,7 @@ socket.on('connection', async (clientSocket) => {
 	follows = await paginatedFollows.getAll()
 	clientSocket.emit('follows', follows)
 
-	const paginatedSubscriptions = twitchClient.helix.subscriptions.getSubscriptions(
+	const paginatedSubscriptions = twitchClient.helix.subscriptions.getSubscriptionsPaginated(
 		userId,
 	)
 	subscriptions = await paginatedSubscriptions.getAll()
