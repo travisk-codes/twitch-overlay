@@ -31,25 +31,29 @@ const webhookConfig = {
 }
 
 async function getWebhookSubscriptions() {
-	const listener = await WebHookListener.create(twitchClient, webhookConfig)
-	listener.listen()
-	const streamChangeSubscription = await listener.subscribeToStreamChanges(
-		userId,
-		onStreamChange,
-	)
-	const followsSubscription = await listener.subscribeToFollowsToUser(
-		userId,
-		onNewFollow,
-	)
-	const subscriptionsSubscription = await listener.subscribeToSubscriptionEvents(
-		userId,
-		onNewSubscription,
-	)
-	return [
-		streamChangeSubscription,
-		followsSubscription,
-		subscriptionsSubscription,
-	]
+	try {
+		const listener = await WebHookListener.create(twitchClient, webhookConfig)
+		listener.listen()
+		const streamChangeSubscription = await listener.subscribeToStreamChanges(
+			userId,
+			onStreamChange,
+		)
+		const followsSubscription = await listener.subscribeToFollowsToUser(
+			userId,
+			onNewFollow,
+		)
+		const subscriptionsSubscription = await listener.subscribeToSubscriptionEvents(
+			userId,
+			onNewSubscription,
+		)
+		return [
+			streamChangeSubscription,
+			followsSubscription,
+			subscriptionsSubscription,
+		]
+	} catch (e) {
+		console.log(e.name, e.message)
+	}
 }
 const webhookSubscriptions = getWebhookSubscriptions()
 
