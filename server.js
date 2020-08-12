@@ -100,6 +100,7 @@ socket.on('connection', async (clientSocket) => {
 		userId,
 	)
 	subscriptions = await paginatedSubscriptions.getAll()
+	console.log('subscriptions: ', subscriptions)
 	clientSocket.emit('subscriptions', subscriptions)
 
 	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
