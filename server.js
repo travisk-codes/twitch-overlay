@@ -93,34 +93,38 @@ const onNewSubscription = (subscription = HelixSubscription) => {
 }
 
 socket.on('connection', async (clientSocket) => {
-	console.log('webclientSocket connection established with client')
-	const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
-		followedUser: userId,
-	})
-	follows = await paginatedFollows.getAll()
-	clientSocket.emit('follows', follows)
+	try {
+		console.log('webclientSocket connection established with client')
+		const paginatedFollows = twitchClient.helix.users.getFollowsPaginated({
+			followedUser: userId,
+		})
+		follows = await paginatedFollows.getAll()
+		clientSocket.emit('follows', follows)
 
-	const paginatedSubscriptions = twitchClient.helix.subscriptions.getSubscriptionsPaginated(
-		userId,
-	)
-	subscriptions = await paginatedSubscriptions.getAll()
-	console.log('subscriptions: ', subscriptions)
-	clientSocket.emit('subscriptions', subscriptions)
+		const paginatedSubscriptions = twitchClient.helix.subscriptions.getSubscriptionsPaginated(
+			userId,
+		)
+		subscriptions = await paginatedSubscriptions.getAll()
+		console.log('subscriptions: ', subscriptions)
+		clientSocket.emit('subscriptions', subscriptions)
 
-	const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
-	if (stream) {
-		clientSocket.emit('streamTitleChange', stream.title)
-	}
-
-	clientSocket.on('disconnect', async () => {
-		try {
-			console.log('disconnected')
-			//subscriptions[0].stop()
-			//subscriptions[1].stop()
-		} catch (e) {
-			console.log(e)
+		const stream = await twitchClient.helix.streams.getStreamByUserId(userId)
+		if (stream) {
+			clientSocket.emit('streamTitleChange', stream.title)
 		}
-	})
+
+		clientSocket.on('disconnect', async () => {
+			try {
+				console.log('disconnected')
+				//subscriptions[0].stop()
+				//subscriptions[1].stop()
+			} catch (e) {
+				console.log(e)
+			}
+		})
+	} catch (e) {
+		console.log(e.name, e.message)
+	}
 })
 
 server.listen(7781, () => console.log('listening on 7781'))
