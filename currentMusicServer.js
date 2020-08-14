@@ -1,9 +1,13 @@
-import express, { static as staticDir } from 'express'
-import { post, get } from 'request'
-import cors from 'cors'
-import { stringify } from 'querystring'
-import cookieParser from 'cookie-parser'
-import { clientId, clientSecret, redirectURI } from './spotifySecrets'
+const express = require('express') // Express web server framework
+const request = require('request') // "Request" library
+const cors = require('cors')
+const stringify = require('querystring').stringify
+const cookieParser = require('cookie-parser')
+const spotifySecrets = require('./spotifySecrets')
+
+const clientId = spotifySecrets.clientId
+const clientSecret = spotifySecrets.clientSecret
+const redirectURI = spotifySecrets.redirectURI
 
 const generateRandomString = (length) => {
 	let text = ''
@@ -23,7 +27,7 @@ const stateKey = 'spotify_auth_state'
 const app = express()
 
 app
-	.use(staticDir(__dirname + '/public'))
+	.use(express.static(__dirname + '/public'))
 	.use(cors())
 	.use(cookieParser())
 
@@ -77,25 +81,20 @@ app.get('/callback', function (req, res) {
 		json: true,
 	}
 
-	post(authOptions, (error, response, body) => {
+	request.post(authOptions, (error, response, body) => {
 		if (error || response.statusCode !== 200) {
 			res.redirect('/overlay?error=invalid_token')
 			return
 		}
 
-		const headers = {
-			'Access-Control-Allow-Origin': '*',
-			Authorization: 'Bearer ' + body.access_token,
-		}
-		let options = {
-			url: 'https://api.spotify.com/v1/me/player',
-			headers,
-			json: true,
-		}
+		const url =
+			'/#' +
+			stringify({
+				access_token: body.access_token,
+				refresh_token: body.refresh_token,
+			})
 
-		get(options, (error, response, body) => {
-			res.json(body)
-		})
+		res.redirect(url)
 	})
 })
 
@@ -115,7 +114,7 @@ app.get('/refresh_token', function (req, res) {
 		json: true,
 	}
 
-	post(authOptions, function (error, response, body) {
+	request.post(authOptions, function (error, response, body) {
 		if (error || response.statusCode !== 200) return
 		res.send({ access_token: body.access_token })
 	})
