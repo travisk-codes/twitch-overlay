@@ -2,7 +2,7 @@ import React from 'react'
 import socketIOClient from 'socket.io-client'
 
 import MusicTicker from './MusicTicker'
-import TickerItems from './Tickers'
+import TickerItems, { TickerItemNew } from './Tickers'
 import Clock from './Clock'
 
 import './App.css'
@@ -30,7 +30,7 @@ function App() {
 		announcement2:
 			'please let me know if the stream is having any technical issues!',
 		announcement3: 'Looking to hire a junior dev? https://hire.travisk.info',
-		'avg followers': '3.7',
+		'avg followers': '4.1',
 		'current status': `Mood: ${currentStatus.mood}/6, Anxiety: ${currentStatus.anxiety}/6, Energy (Mental): ${currentStatus.mental}/6, Energy (Physical): ${currentStatus.physical}/6 `,
 		'Pomodoro Technique':
 			'time management technique where one works for 25 minutes and breaks for 5, ',
@@ -43,47 +43,40 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['🕒', 'Doing Now:', textEntries['doing now']],
-			color: 'lightskyblue',
-			isFullyColored: false,
+			text: streamTitle,
 		},
 		{
-			textArray: ['🕒', 'Then Later:', textEntries['then later']],
+			emojis: ['🕒'],
+			title: 'Doing Now:',
+			text: textEntries['doing now'],
 			color: 'lightskyblue',
-			isFullyColored: false,
 		},
 		{
-			textArray: ['', '', textEntries['announcement1']],
-			color: 'lime',
-			isFullyColored: true,
+			emojis: ['🕒'],
+			title: 'Doing Later:',
+			text: textEntries['then later'],
+			color: 'lightskyblue',
 		},
-		/* 				{
-			textArray: ['🎉', 'AFFILIATE GET!'],
-			color: 'rgb(150, 255, 150)',
-			isFullyColored: true,
+		{
+			title: textEntries['announcement1'],
+			color: 'springgreen',
 		},
- {
-			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers 💜 Thank You! 💜'],
-			color: 'rgb(150, 150, 255)',
-			isFullyColored: true,
-		},
- */ {
-			textArray: ['📢', 'Announcement:', textEntries['announcement3']],
+		{
+			emojis: ['📢'],
+			title: 'Announcement:',
+			text: textEntries['announcement3'],
 			color: 'red',
-			isFullyColored: false,
 		},
 		{
-			textArray: [
-				'👀',
-				`${textEntries['avg followers']} average viewers (5 to join Live Coders group!)`,
-			],
+			emojis: ['👀'],
+			title: `${textEntries['avg followers']} average viewers (5 to join Live Coders group!)`,
 			color: 'rgb(255, 150, 150)',
-			isFullyColored: true,
 		},
 		{
-			textArray: ['📢', 'Announcement:', textEntries['announcement2']],
+			emojis: ['📢'],
+			title: 'Announcement:',
+			text: textEntries['announcement2'],
 			color: 'red',
-			isFullyColored: false,
 		},
 	]
 
@@ -93,35 +86,30 @@ function App() {
 		.join(' ♥ ')
 	const bottomTextFollowers = followers.filter((text, i) => i < 3).join(' ♥ ')
 
-	const bottomTickerItems = [
+	const bottomTickerItemsNew = [
 		{
-			textArray: [' 🧡 ', 'Latest Subscribers 🧡 ', bottomTextSubscribers],
+			emojis: ['🧡', '🧡'],
+			title: 'Latest Subscribers',
+			text: bottomTextSubscribers,
 			color: 'orange',
-			isFullyColored: false,
 		},
 		{
-			textArray: [' 💜 ', 'Latest Followers 💜 ', bottomTextFollowers],
+			emojis: ['💜', '💜'],
+			title: 'Latest Followers',
+			text: bottomTextFollowers,
 			color: 'violet',
-			isFullyColored: false,
 		},
 		{
-			textArray: [
-				'🍅',
-				'Pomodoro Technique:',
-				'work for 25 minutes, break for 5, repeat!',
-			],
+			emojis: ['🍅', '🍅'],
+			title: 'Pomodoro Technique',
+			text: '1) work for 25 minutes 2) break for 5 minutes 3) repeat!',
 			color: 'red',
-			isFullyColored: false,
 		},
 		{
-			textArray: [
-				'👩🏼 ',
-				' Current Status ',
-				' 🤔 ',
-				textEntries['current status'],
-			],
-			color: '#ff5090',
-			isFullyColored: false,
+			emojis: ['👩🏼', '🤔', '📊'],
+			title: 'Current Status',
+			text: textEntries['current status'],
+			color: '#ff5080',
 		},
 	]
 
@@ -203,13 +191,10 @@ function App() {
 			</div>
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
-					<TickerItems items={bottomTickerItems}>
+					<TickerItems items={bottomTickerItemsNew}>
 						<MusicTicker />
 					</TickerItems>
-					<TickerItems items={bottomTickerItems}>
-						<MusicTicker />
-					</TickerItems>
-					<TickerItems items={bottomTickerItems}>
+					<TickerItems items={bottomTickerItemsNew}>
 						<MusicTicker />
 					</TickerItems>
 				</div>

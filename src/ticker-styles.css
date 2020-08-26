@@ -1,0 +1,29 @@
+.ticker-item {
+	padding: 0 30px;
+}
+
+.ticker-item__emoji {
+	margin: 0 5px;
+}
+
+.ticker-item__text {
+	margin: 0 5px;
+	position: relative;
+	color: white;
+}
+
+.ticker-item__title {
+	margin: 0 5px;
+	padding-right: 1px; /* prevent text shadow wrap */
+	position: relative;
+}
+
+.ticker-item__text:after,
+.ticker-item__title:after {
+	content: attr(data-content);
+	position: absolute;
+	top: 1px;
+	left: 1px;
+	z-index: -1;
+	color: black;
+}

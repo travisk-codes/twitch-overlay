@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { TickerItem } from './Tickers'
+import { TickerItemNew } from './Tickers'
 
 const Clock = () => {
 	const [timeTextArray, setTimeTextArray] = useState([])
@@ -34,20 +34,7 @@ const Clock = () => {
 		let second = date.getSeconds().toString().padStart(2, '0')
 
 		// e.g. US NC RA 20 03 09 13 00
-		return [
-			'',
-			'🕒',
-			'EA',
-			'US ',
-			'NC ',
-			'RA ',
-			year + ' ',
-			month + ' ',
-			day + ' ',
-			hour + ' ',
-			minute + ' ',
-			second + ' ',
-		]
+		return `EA US NC RA ${year} ${month} ${day} ${hour} ${minute} ${second}`
 	}
 
 	useInterval(() => {
@@ -55,11 +42,7 @@ const Clock = () => {
 	}, 1000)
 
 	return (
-		<TickerItem
-			textArray={timeTextArray}
-			color='lightskyblue'
-			isFullyColored={true}
-		/>
+		<TickerItemNew emojis={['🕒']} title={timeTextArray} color='lightskyblue' />
 	)
 }
 

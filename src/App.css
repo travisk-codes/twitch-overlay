@@ -18,7 +18,7 @@
 
 @keyframes ticker-reverse {
 	0% {
-		transform: translateX(-33.3%);
+		transform: translateX(-50%);
 		visibility: visible;
 	}
 	100% {
@@ -166,13 +166,13 @@
 	padding: 0 30px;
 }
 
-.ticker-item {
+.ticker-item-old {
 	position: relative;
 	top: 0px;
 	left: 0px;
 }
 
-.ticker-item:after {
+.ticker-item-old:after {
 	content: attr(data-content);
 	position: absolute;
 	top: 1px;

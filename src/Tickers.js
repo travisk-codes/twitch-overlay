@@ -1,4 +1,5 @@
 import React from 'react'
+import './ticker-styles.css'
 
 export const TickerItem = ({ textArray, color, isFullyColored }) => (
 	<div
@@ -15,7 +16,7 @@ export const TickerItem = ({ textArray, color, isFullyColored }) => (
 		&nbsp;
 		{textArray.map((_, i) =>
 			i > 1 ? (
-				<span className='ticker-item' data-content={textArray[i]} key={i}>
+				<span className='ticker-item-old' data-content={textArray[i]} key={i}>
 					{textArray[i]}&nbsp;
 				</span>
 			) : null,
@@ -28,7 +29,7 @@ const TickerItems = ({ items, children }) => (
 		{children ? <span key={0}>{children}</span> : null}
 		{items.map((props, i) => (
 			<span key={i + 1}>
-				<TickerItem {...props} />
+				<TickerItemNew {...props} />
 			</span>
 		))}
 	</>
@@ -36,39 +37,40 @@ const TickerItems = ({ items, children }) => (
 
 export default TickerItems
 
-/**
- * case 1:
- * emoji
- * title w/ color
- * emoji
- * text
- *
- * case 2:
- * emoji
- * text
- *
- * case 3:
- * emoji
- * title
- * text
- *
- * case 4:
- * text
- *
- * case 5:
- * title w/ color
- *
- * case 6:
- * text
- 
+export const TickerItemNew = ({ color, emojis, title, text }) => (
+	<span className='ticker-item'>
+		{emojis && emojis[0] ? (
+			<span className='ticker-item__emoji' role='img' aria-label='emoji'>
+				{emojis[0]}
+			</span>
+		) : null}
 
-const tickerItem = {
-	color: 'red',
-	firstEmoji: 'asdf', // false
-	secondEmoji: false,
-	title: 'Announcement', // false
-	text: 'this is an announcement',
-}
+		{title ? (
+			<span
+				style={color ? { color } : { color: 'white' }}
+				className='ticker-item__title'
+				data-content={title}
+			>
+				{title}
+			</span>
+		) : null}
 
-const TickerItem2 = ({ item }) => <div className='ticker__item text'></div>
-*/
+		{emojis && emojis[1] ? (
+			<span className='ticker-item__emoji' role='img' aria-label='emoji'>
+				{emojis[1]}
+			</span>
+		) : null}
+
+		{text ? (
+			<span className='ticker-item__text' data-content={text}>
+				{text}
+			</span>
+		) : null}
+
+		{emojis && emojis[2] ? (
+			<span className='ticker-item__emoji' role='img' aria-label='emoji'>
+				{emojis[2]}
+			</span>
+		) : null}
+	</span>
+)
