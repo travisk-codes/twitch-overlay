@@ -23,10 +23,11 @@ export const TickerItem = ({ textArray, color, isFullyColored }) => (
 	</div>
 )
 
-const TickerItems = ({ items }) => (
+const TickerItems = ({ items, children }) => (
 	<>
+		{children ? <span key={0}>{children}</span> : null}
 		{items.map((props, i) => (
-			<span key={i}>
+			<span key={i + 1}>
 				<TickerItem {...props} />
 			</span>
 		))}

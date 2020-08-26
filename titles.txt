@@ -56,6 +56,8 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 👩🏼‍💻 Web Dev 🏠 Portfolio Refresh 🍅 Doing Pomodoros 📢 feat. Party Parrot 🦜 & Blobcat 🐈b
 🧘‍♀️ Chillin ⚛️ Physics Videos 📢 feat. Party Parrot 🦜 & Blobcat 🐈
 👩🏼‍💻 Web Dev ⚛️ World Splitter App 🍅 Doing Pomodoros 📢 feat. Party Parrot 🦜 & Blobcat 🐈
+👩🏼‍💻 Web Dev 🖼️ Interview Assignment: Build Webpage ⚛️ React.js 📢 feat. Party Parrot 🦜 & Blobcat 🐈
+👩🏼‍💻 Web Dev 🖼️ Twitch Stream Overlay 🌐 React.js, Node.js, Socket.io, Redis 📢 feat. Party Parrot 🦜 & Blobcat 🐈
 
 
 👩🏼‍💻 Web Dev 

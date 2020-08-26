@@ -3,12 +3,14 @@ import socketIOClient from 'socket.io-client'
 
 import MusicTicker from './MusicTicker'
 import TickerItems from './Tickers'
+import Clock from './Clock'
 
 import './App.css'
 
 const socket = socketIOClient('https://overlayserver.travisk.info')
 
 function App() {
+	console.log('app')
 	const [followers, setFollowers] = React.useState([])
 	const [subscribers, setSubscribers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
@@ -21,7 +23,6 @@ function App() {
 		physical: 3,
 	})
 	const [isEditorOpen, setEditorOpen] = React.useState(true)
-	const [textArray, setTextArray] = React.useState([])
 
 	const textEntries = {
 		'doing now': doingNow,
@@ -30,16 +31,13 @@ function App() {
 		announcement2:
 			'please let me know if the stream is having any technical issues!',
 		announcement3: 'Looking to hire a junior dev? https://hire.travisk.info',
-		'avg followers': '3.1',
+		'avg followers': '3.7',
 		'current status': `Mood: ${currentStatus.mood}/6, Anxiety: ${currentStatus.anxiety}/6, Energy (Mental): ${currentStatus.mental}/6, Energy (Physical): ${currentStatus.physical}/6 `,
+		'Pomodoro Technique':
+			'time management technique where one works for 25 minutes and breaks for 5, ',
 	}
 
 	const topTickerItems = [
-		{
-			textArray: [''].concat(textArray),
-			color: 'lightskyblue',
-			isFullyColored: true,
-		},
 		{
 			textArray: ['', '', streamTitle],
 			color: 'purple',
@@ -56,24 +54,29 @@ function App() {
 			isFullyColored: false,
 		},
 		{
-			textArray: ['📢', 'Announcement:', textEntries['announcement1']],
-			color: 'red',
-			isFullyColored: false,
+			textArray: ['', '', textEntries['announcement1']],
+			color: 'lime',
+			isFullyColored: true,
 		},
-		{
+		/* 				{
 			textArray: ['🎉', 'AFFILIATE GET!'],
 			color: 'rgb(150, 255, 150)',
 			isFullyColored: true,
 		},
-		{
+ {
 			textArray: ['🙋🏼‍♀️', followers.length + '/50 followers 💜 Thank You! 💜'],
 			color: 'rgb(150, 150, 255)',
 			isFullyColored: true,
 		},
+ */ {
+			textArray: ['📢', 'Announcement:', textEntries['announcement3']],
+			color: 'red',
+			isFullyColored: false,
+		},
 		{
 			textArray: [
 				'👀',
-				`${textEntries['avg followers']}/3 average viewers 🧡 Thank You! 🧡`,
+				`${textEntries['avg followers']} average viewers (5 to join Live Coders group!)`,
 			],
 			color: 'rgb(255, 150, 150)',
 			isFullyColored: true,
@@ -85,9 +88,18 @@ function App() {
 		},
 	]
 
+	const bottomTextSubscribers = subscribers
+		.map((subscriber) => subscriber.name)
+		.filter((text, i) => i < 3)
+		.join(' ♥ ')
 	const bottomTextFollowers = followers.filter((text, i) => i < 3).join(' ♥ ')
 
 	const bottomTickerItems = [
+		{
+			textArray: [' 🧡 ', 'Latest Subscribers 🧡 ', bottomTextSubscribers],
+			color: 'orange',
+			isFullyColored: false,
+		},
 		{
 			textArray: [' 💜 ', 'Latest Followers 💜 ', bottomTextFollowers],
 			color: 'violet',
@@ -96,6 +108,15 @@ function App() {
 		{
 			textArray: MusicTicker(),
 			color: 'white',
+			isFullyColored: false,
+		},
+		{
+			textArray: [
+				'🍅',
+				'Pomodoro Technique:',
+				'work for 25 minutes, break for 5, repeat!',
+			],
+			color: 'red',
 			isFullyColored: false,
 		},
 		{
@@ -110,72 +131,84 @@ function App() {
 		},
 	]
 
-	function useInterval(callback, delay) {
-		const savedCallback = React.useRef()
-
-		// Remember the latest callback.
-		React.useEffect(() => {
-			savedCallback.current = callback
-		}, [callback])
-
-		// Set up the interval.
-		React.useEffect(() => {
-			function tick() {
-				savedCallback.current()
-			}
-			if (delay !== null) {
-				let id = setInterval(tick, delay)
-				return () => clearInterval(id)
-			}
-		}, [delay])
-	}
-
-	function getTimeTextArray() {
-		const date = new Date()
-		// US NC RA 20 03 09 13 00
-		let year = date.getFullYear() % 2000
-		let month = (date.getMonth() + 1).toString().padStart(2, '0')
-		let day = date.getDate().toString().padStart(2, '0')
-		return [
-			'🕒',
-			'EA',
-			'US ',
-			'NC ',
-			'RA ',
-			year + ' ',
-			month + ' ',
-			day + ' ',
-			date.getHours().toString().padStart(2, '0') + ' ',
-			date.getMinutes().toString().padStart(2, '0') + ' ',
-			date.getSeconds().toString().padStart(2, '0'),
-		]
-	}
-
-	useInterval(() => {
-		let array = getTimeTextArray()
-		setTextArray(array)
-	}, 1000)
-
 	React.useEffect(() => {
+		console.log('useeffect')
 		socket.on('follows', (data) => {
-			setFollowers(data.map((datum) => datum._data.from_name))
+			const newFollowers = data.map((datum) => datum._data.from_name)
+			if (newFollowers !== followers) setFollowers(newFollowers)
 		})
 		socket.on('streamTitleChange', (data) => setStreamTitle(data))
-		socket.on('subscriptions', (data) => console.log(data))
+		socket.on('subscriptions', (data) => {
+			console.log('subs')
+			const newNameTimePairs = getSubNamesFromSubObjArray(data)
+			console.log(newNameTimePairs)
+			if (newNameTimePairs !== subscribers) setSubscribers(newNameTimePairs)
+		})
+		socket.on('doing-now', (data) => {
+			if (data !== doingNow) setDoingNow(data)
+		})
+		socket.on('doing-later', (data) => {
+			if (data !== doingLater) setDoingLater(data)
+		})
+		socket.on('anxiety', (data) => {
+			if (data !== currentStatus.anxiety)
+				setCurrentStatus((status) => ({
+					...status,
+					anxiety: data,
+				}))
+		})
+		socket.on('energy-mental', (data) => {
+			if (data !== currentStatus.mental)
+				setCurrentStatus((status) => ({
+					...status,
+					mental: data,
+				}))
+		})
+		socket.on('energy-physical', (data) => {
+			if (data !== currentStatus.physical)
+				setCurrentStatus((status) => ({
+					...status,
+					physical: data,
+				}))
+		})
+		socket.on('mood', (data) => {
+			if (data !== currentStatus.mood)
+				setCurrentStatus((status) => ({
+					...status,
+					mood: data,
+				}))
+		})
 		return () => socket.off('')
-	}, [followers, streamTitle, subscribers])
+	}, [])
+
+	const getSubNamesFromSubObjArray = (dataObject) => {
+		const objectArray = dataObject.data
+		let names = [],
+			times = []
+		objectArray.forEach((obj, i) => {
+			if (obj._eventData.event_type === 'subscriptions.subscribe') {
+				names.push(obj._data.user_name)
+				times.push(obj._eventData.event_timestamp)
+			}
+		})
+		const nameTimePairs = names.map((name, i) => ({ name, time: times[i] }))
+		return nameTimePairs
+	}
 
 	return (
 		<div className='App'>
 			<div className='ticker-wrap'>
 				<div className='ticker'>
-					<TickerItems items={topTickerItems} />
-					<TickerItems items={topTickerItems} />
+					<TickerItems items={topTickerItems}>
+						<Clock />
+					</TickerItems>
+					<TickerItems items={topTickerItems}>
+						<Clock />
+					</TickerItems>
 				</div>
 			</div>
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
-					<TickerItems items={bottomTickerItems} />
 					<TickerItems items={bottomTickerItems} />
 					<TickerItems items={bottomTickerItems} />
 					<TickerItems items={bottomTickerItems} />
@@ -199,7 +232,10 @@ function App() {
 						<input
 							className='ticker-text-input'
 							value={doingNow}
-							onChange={(e) => setDoingNow(e.target.value)}
+							onChange={(e) => {
+								setDoingNow(e.target.value)
+							}}
+							onBlur={() => socket.emit('doing-now', doingNow)}
 						/>
 					</label>
 					<br />
@@ -209,6 +245,7 @@ function App() {
 							className='ticker-text-input'
 							value={doingLater}
 							onChange={(e) => setDoingLater(e.target.value)}
+							onBlur={() => socket.emit('doing-later', doingLater)}
 						/>
 					</label>
 					<br />
@@ -219,12 +256,13 @@ function App() {
 							type='number'
 							className='ticker-text-input'
 							value={currentStatus.mood}
-							onChange={(e) =>
+							onChange={(e) => {
 								setCurrentStatus({
 									...currentStatus,
 									mood: e.target.value,
 								})
-							}
+								socket.emit('mood', e.target.value)
+							}}
 						/>
 					</label>
 					<label>
@@ -234,12 +272,13 @@ function App() {
 							type='number'
 							className='ticker-text-input'
 							value={currentStatus.anxiety}
-							onChange={(e) =>
+							onChange={(e) => {
 								setCurrentStatus({
 									...currentStatus,
 									anxiety: e.target.value,
 								})
-							}
+								socket.emit('anxiety', e.target.value)
+							}}
 						/>
 					</label>
 					<label>
@@ -249,12 +288,13 @@ function App() {
 							type='number'
 							className='ticker-text-input'
 							value={currentStatus.mental}
-							onChange={(e) =>
+							onChange={(e) => {
 								setCurrentStatus({
 									...currentStatus,
 									mental: e.target.value,
 								})
-							}
+								socket.emit('energy-mental', e.target.value)
+							}}
 						/>
 					</label>
 					<label>
@@ -264,18 +304,24 @@ function App() {
 							type='number'
 							className='ticker-text-input'
 							value={currentStatus.physical}
-							onChange={(e) =>
+							onChange={(e) => {
 								setCurrentStatus({
 									...currentStatus,
 									physical: e.target.value,
 								})
-							}
+								socket.emit('energy-physical', e.target.value)
+							}}
 						/>
 					</label>
 
 					<div>
 						<a href='https://overlayserver.travisk.info/login'>
 							{'Log in to Spotify'}
+						</a>
+					</div>
+					<div>
+						<a href='https://overlayserver.travisk.info/twitch-login'>
+							{'Log in to Twitch'}
 						</a>
 					</div>
 				</form>

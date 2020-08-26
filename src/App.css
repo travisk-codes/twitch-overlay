@@ -18,7 +18,7 @@
 
 @keyframes ticker-reverse {
 	0% {
-		transform: translateX(-50%);
+		transform: translateX(-33.3%);
 		visibility: visible;
 	}
 	100% {
@@ -77,7 +77,7 @@
 	box-sizing: content-box;
 	animation-name: ticker-reverse;
 	animation-iteration-count: infinite;
-	animation-duration: 70s;
+	animation-duration: 50s;
 	animation-timing-function: linear;
 }
 
@@ -189,6 +189,7 @@
 	top: 50px;
 	padding: 10px;
 	background-color: #fafafa;
+	font-size: 16px;
 }
 
 .editor-button {

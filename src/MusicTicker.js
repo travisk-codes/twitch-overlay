@@ -76,7 +76,7 @@ const MusicTicker = () => {
 	}
 
 	useInterval(fetchCurrentMusic, 5000)
-	useInterval(fetchNewAccessToken, 1000 * 60 * 59)
+	useInterval(fetchNewAccessToken, 1000 * 60 * 5)
 
 	const { song, artist, album } = currentMusic
 
