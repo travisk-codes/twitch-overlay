@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import queryString from 'query-string'
+import { TickerItem } from './Tickers'
 
 const MusicTicker = () => {
 	const [currentMusic, setCurrentMusic] = useState({
@@ -89,7 +90,9 @@ const MusicTicker = () => {
 			: ` "${song}" by ${artist} from the album "${album}"`,
 	]
 
-	return textArray
+	return (
+		<TickerItem textArray={textArray} color='white' isFullyColored={false} />
+	)
 }
 
 export default MusicTicker

@@ -10,7 +10,6 @@ import './App.css'
 const socket = socketIOClient('https://overlayserver.travisk.info')
 
 function App() {
-	console.log('app')
 	const [followers, setFollowers] = React.useState([])
 	const [subscribers, setSubscribers] = React.useState([])
 	const [streamTitle, setStreamTitle] = React.useState('No stream title')
@@ -103,11 +102,6 @@ function App() {
 		{
 			textArray: [' 💜 ', 'Latest Followers 💜 ', bottomTextFollowers],
 			color: 'violet',
-			isFullyColored: false,
-		},
-		{
-			textArray: MusicTicker(),
-			color: 'white',
 			isFullyColored: false,
 		},
 		{
@@ -209,9 +203,15 @@ function App() {
 			</div>
 			<div className='ticker-wrap-bottom'>
 				<div className='ticker-bottom'>
-					<TickerItems items={bottomTickerItems} />
-					<TickerItems items={bottomTickerItems} />
-					<TickerItems items={bottomTickerItems} />
+					<TickerItems items={bottomTickerItems}>
+						<MusicTicker />
+					</TickerItems>
+					<TickerItems items={bottomTickerItems}>
+						<MusicTicker />
+					</TickerItems>
+					<TickerItems items={bottomTickerItems}>
+						<MusicTicker />
+					</TickerItems>
 				</div>
 			</div>
 			<button
