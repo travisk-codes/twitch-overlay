@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { TickerItemNew } from './Tickers'
+import TickerItem from './TickerItem'
 
 const Clock = () => {
 	const [timeTextArray, setTimeTextArray] = useState([])
@@ -42,7 +42,7 @@ const Clock = () => {
 	}, 1000)
 
 	return (
-		<TickerItemNew emojis={['🕒']} title={timeTextArray} color='lightskyblue' />
+		<TickerItem emojis={['🕒']} title={timeTextArray} color='lightskyblue' />
 	)
 }
 
