@@ -59,6 +59,8 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 👩🏼‍💻 Web Dev 🖼️ Interview Assignment: Build Webpage ⚛️ React.js 📢 feat. Party Parrot 🦜 & Blobcat 🐈
 👩🏼‍💻 Web Dev 🖼️ Twitch Stream Overlay 🌐 React.js, Node.js, Socket.io, Redis 📢 feat. Party Parrot 🦜 & Blobcat 🐈
 
+👩🏼‍💻 Web Dev 📈 Datums: Personal Metrics Tracker 🌐 React.js, Next.js, TypeScript, Tailwind 📢 feat. Dual Cat Cams 🐈🐈
+
 
 👩🏼‍💻 Web Dev 
 📓 Writing
