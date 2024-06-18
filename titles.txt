@@ -63,6 +63,7 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 👩🏼‍💻 Web Dev 🔥🤖 Hotbot: Discord Activity Notifications 🛠️ Node.js, Discord.js 📢 feat. Cat & Bird Cams 🐈🐦
 ⚔️ First Playthrough 💪 Quality Build 📢 feat. Dual Cat Cams 🐈🐈
 👩🏼‍💻 Web Dev 📈 Datums: Personal Metrics Tracker 🛠️ React.js, Next.js, TypeScript, Tailwind 📢 feat. Cat & Bird Cams 🐈🐦
+👩🏼‍💻 Web Dev 📈 Datums: Personal Metrics Tracker 🛠️ React.js, Next.js, TypeScript, Tailwind 📢 feat. Dual Cat Cams 🐈🐈
 
 👩🏼‍💻 Web Dev 
 📓 Writing
