@@ -64,6 +64,8 @@ Just hangin' for the time being, feat. Party Parrot 🎉 🦜
 ⚔️ First Playthrough 💪 Quality Build 📢 feat. Dual Cat Cams 🐈🐈
 👩🏼‍💻 Web Dev 📈 Datums: Personal Metrics Tracker 🛠️ React.js, Next.js, TypeScript, Tailwind 📢 feat. Cat & Bird Cams 🐈🐦
 👩🏼‍💻 Web Dev 📈 Datums: Personal Metrics Tracker 🛠️ React.js, Next.js, TypeScript, Tailwind 📢 feat. Dual Cat Cams 🐈🐈
+👩🏼‍💻 Web Dev 🐈🐦 Cat & Bird Cams 🏨 Company Building 📈 Personal Metrics Tracker 🛠️ React.js, Next.js, TypeScript, Tailwind 
+
 
 👩🏼‍💻 Web Dev 
 📓 Writing
